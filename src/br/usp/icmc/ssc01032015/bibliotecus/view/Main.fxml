@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.Scene?>
+<?import javafx.stage.Stage?>
+<Stage title="Bibliotecus"
+       xmlns="http://javafx.com/javafx/null"
+       xmlns:fx="http://javafx.com/fxml/1"
+       fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.MainController">
+    <scene>
+
+        <Scene>
+            <BorderPane prefHeight="480" prefWidth="854">
+                <top>
+                    <MenuBar>
+                        <Menu text="_User">
+                            <MenuItem text="Sign Up" onAction="#userSignUp" />
+                            <SeparatorMenuItem/>
+                            <MenuItem text="Sign In" onAction="#userSignIn" />
+                        </Menu>
+
+                        <Menu text="_Book">
+                            <MenuItem text="Register" onAction="#bookRegister" />
+                        </Menu>
+
+                        <Menu text="_CSV">
+                            <Menu text="Import">
+                                <MenuItem text="Books" onAction="#booksImport" />
+                                <MenuItem text="Users" onAction="#usersImport" />
+                                <MenuItem text="Loans" onAction="#loansImport" />
+                            </Menu>
+
+                            <Menu text="Export">
+                                <MenuItem text="Books" onAction="#booksExport" />
+                                <MenuItem text="Users" onAction="#usersExport" />
+                                <MenuItem text="Loans" onAction="#loansExport" />
+                            </Menu>
+                        </Menu>
+                    </MenuBar>
+                </top>
+
+                <center>
+                    <TabPane>
+                        <tabs>
+                            <Tab closable="false" text="Search Books"/>
+                            <Tab closable="false" text="Search Users"/>
+                            <Tab closable="false" text="Search Loans"/>
+                            <Tab closable="false" disable="true" text="My Books"/>
+                        </tabs>
+                    </TabPane>
+                </center>
+            </BorderPane>
+        </Scene>
+
+    </scene>
+</Stage>
