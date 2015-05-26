@@ -37,10 +37,10 @@
 
     <center>
         <TabPane>
-                <Tab closable="false" text="Search Books"/>
-                <Tab closable="false" text="Search Users"/>
-                <Tab closable="false" text="Search Loans"/>
-                <Tab closable="false" disable="true" text="My Books"/>
+            <Tab closable="false" text="Search Books"/>
+            <Tab closable="false" text="Search Users"/>
+            <Tab closable="false" text="Search Loans"/>
+            <Tab closable="false" disable="true" text="My Books"/>
         </TabPane>
     </center>
 </BorderPane>

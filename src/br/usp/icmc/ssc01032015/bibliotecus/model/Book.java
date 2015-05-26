@@ -17,11 +17,17 @@ public class Book
      */
     private Type type;
 
-    public Book(String title, String author, Type type)
+    /**
+     * Numbers of copies
+     */
+    private int totalQuantity;
+
+    public Book(String title, String author, Type type, int totalQuantity)
     {
         this.title = title;
         this.author = author;
         this.type = type;
+        this.totalQuantity = totalQuantity;
     }
 
     public String getTitle()
@@ -52,6 +58,16 @@ public class Book
     public void setType(Type type)
     {
         this.type = type;
+    }
+
+    public int getTotalQuantity()
+    {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(int totalQuantity)
+    {
+        this.totalQuantity = totalQuantity;
     }
 
     public enum Type

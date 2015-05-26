@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
 
+<?import java.lang.String?>
+<GridPane hgap="5.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.RegisterBookController">
+    <columnConstraints>
+        <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" />
+    <Label text="Title"/>
+    <TextField fx:id="titleField" GridPane.columnIndex="1"/>
+
+    <Label text="Author" GridPane.rowIndex="1"/>
+    <TextField fx:id="authorField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label text="Type" GridPane.rowIndex="2"/>
+    <ComboBox fx:id="typeBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="General"/>
+                <String fx:value="Textbook"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <Label text="Quantity" GridPane.rowIndex="3"/>
+    <Spinner fx:id="quantitySpinner" editable="false" initialValue="1" max="100" min="0" GridPane.columnIndex="1"
+             GridPane.rowIndex="3"/>
+
+    <Button onAction="#onRegister" text="Register" GridPane.columnIndex="1" GridPane.halignment="RIGHT"
+            GridPane.rowIndex="4"/>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+</GridPane>
