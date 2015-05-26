@@ -1,16 +1,66 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Tab;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.ResourceBundle;
 
 
-public class MainController
+public class MainController implements Initializable
 {
+
+    @FXML
+    private Tab listBooksTab;
+
+    @FXML
+    private Tab listUsersTab;
+
+    @FXML
+    private Tab listLoansTab;
+
+    @FXML
+    private Tab myBooksTab;
+
+    @FXML
+    private DatePicker datePicker;
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources)
+    {
+
+        try
+        {
+            Parent root;
+            root = FXMLLoader.load(getClass().getResource("../view/ListBooksTab.fxml"));
+            listBooksTab.setContent(root);
+
+            root = FXMLLoader.load(getClass().getResource("../view/ListLoansTab.fxml"));
+            listLoansTab.setContent(root);
+
+            root = FXMLLoader.load(getClass().getResource("../view/ListUsersTab.fxml"));
+            listUsersTab.setContent(root);
+
+            root = FXMLLoader.load(getClass().getResource("../view/myBooksTab.fxml"));
+            myBooksTab.setContent(root);
+
+            datePicker.setValue(LocalDate.now());
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public void userSignUp(ActionEvent actionEvent) throws IOException
     {
         Parent root = FXMLLoader.load(getClass().getResource("../view/SignUp.fxml"));

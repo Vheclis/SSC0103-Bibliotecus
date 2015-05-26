@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.ListLoansTabController">
+    <center>
+        <TableView BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn text="User" />
+                <TableColumn text="Book" />
+                <TableColumn text="Check Out" />
+                <TableColumn text="Check In" />
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

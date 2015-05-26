@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.MyBooksTab">
+   <center>
+      <TableView BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn text="Book" />
+          <TableColumn text="Check Out" />
+          <TableColumn text="Due Date" />
+          <TableColumn text="Status" />
+          <TableColumn text="Suspension" />
+        </columns>
+      </TableView>
+   </center>
+</BorderPane>

@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="480" prefWidth="854"
-            xmlns="http://javafx.com/javafx/null"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.MainController">
+<BorderPane prefHeight="480" prefWidth="854" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.MainController">
     <top>
         <MenuBar>
             <Menu text="_User">
-                <MenuItem text="Sign Up" onAction="#userSignUp"/>
-                <SeparatorMenuItem/>
-                <MenuItem text="Sign In" onAction="#userSignIn"/>
+                <MenuItem onAction="#userSignUp" text="Sign Up" />
+                <SeparatorMenuItem />
+                <MenuItem onAction="#userSignIn" text="Sign In" />
             </Menu>
 
             <Menu text="_Book">
-                <MenuItem text="Register" onAction="#bookRegister"/>
+                <MenuItem onAction="#bookRegister" text="Register" />
             </Menu>
 
             <Menu text="_CSV">
                 <Menu text="Import">
-                    <MenuItem text="Books" onAction="#booksImport"/>
-                    <MenuItem text="Users" onAction="#usersImport"/>
-                    <MenuItem text="Loans" onAction="#loansImport"/>
+                    <MenuItem onAction="#booksImport" text="Books" />
+                    <MenuItem onAction="#usersImport" text="Users" />
+                    <MenuItem onAction="#loansImport" text="Loans" />
                 </Menu>
 
                 <Menu text="Export">
-                    <MenuItem text="Books" onAction="#booksExport"/>
-                    <MenuItem text="Users" onAction="#usersExport"/>
-                    <MenuItem text="Loans" onAction="#loansExport"/>
+                    <MenuItem onAction="#booksExport" text="Books" />
+                    <MenuItem onAction="#usersExport" text="Users" />
+                    <MenuItem onAction="#loansExport" text="Loans" />
                 </Menu>
             </Menu>
         </MenuBar>
@@ -37,11 +38,17 @@
 
     <center>
         <TabPane>
-            <Tab closable="false" text="Search Books"/>
-            <Tab closable="false" text="Search Users"/>
-            <Tab closable="false" text="Search Loans"/>
-            <Tab closable="false" disable="true" text="My Books"/>
+            <Tab fx:id="listBooksTab" closable="false" text="List Books" />
+            <Tab fx:id="listUsersTab" closable="false" text="List Users" />
+            <Tab fx:id="listLoansTab" closable="false" text="List Loans" />
+            <Tab fx:id="myBooksTab" closable="false" disable="true" text="My Books" />
         </TabPane>
     </center>
+   <bottom>
+      <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+            <DatePicker fx:id="datePicker" />
+        </items>
+      </ToolBar>
+   </bottom>
 </BorderPane>
-
