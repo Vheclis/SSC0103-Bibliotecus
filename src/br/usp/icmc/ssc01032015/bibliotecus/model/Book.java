@@ -1,10 +1,6 @@
 package br.usp.icmc.ssc01032015.bibliotecus.model;
 
-import br.usp.icmc.ssc01032015.bibliotecus.serialization.CSVSerializable;
-
-import java.util.Scanner;
-
-public class Book implements CSVSerializable
+public class Book
 {
     /**
      * Title of the book
@@ -26,16 +22,6 @@ public class Book implements CSVSerializable
         this.title = title;
         this.author = author;
         this.type = type;
-    }
-
-    public Book(String csv)
-    {
-        Scanner scanner = new Scanner(csv);
-        scanner.useDelimiter(", *");
-
-        title = scanner.next();
-        author = scanner.next();
-        type = Type.valueOf(scanner.next());
     }
 
     public String getTitle()
@@ -66,12 +52,6 @@ public class Book implements CSVSerializable
     public void setType(Type type)
     {
         this.type = type;
-    }
-
-    @Override
-    public String asCSV()
-    {
-        return title + ", " + author + ", " + type.name;
     }
 
     public enum Type
