@@ -2,18 +2,20 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.ListBooksTabController">
     <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="booksTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn text="Title" />
-          <TableColumn text="Author" />
-          <TableColumn text="Type" />
-          <TableColumn text="Quantity" />
+          <TableColumn fx:id="titleCol" minWidth="200.0" text="Title" />
+          <TableColumn fx:id="authorCol" minWidth="200.0" text="Author" />
+          <TableColumn fx:id="typeCol" minWidth="50.0" text="Type" />
+          <TableColumn fx:id="quantityCol" minWidth="25" text="Quantity" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </center>
    <bottom>

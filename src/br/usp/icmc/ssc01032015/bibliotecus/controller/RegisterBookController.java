@@ -28,7 +28,7 @@ public class RegisterBookController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        typeBox.setValue(typeBox.getItems().get(0));
+        typeBox.getSelectionModel().selectFirst();
     }
 
     public void onRegister(ActionEvent actionEvent)

@@ -30,7 +30,7 @@ public class SignUpController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        typeBox.setValue(typeBox.getItems().get(0));
+        typeBox.getSelectionModel().selectFirst();
     }
 
     /**

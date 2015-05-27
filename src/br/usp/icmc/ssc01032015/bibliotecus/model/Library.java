@@ -1,32 +1,65 @@
 package br.usp.icmc.ssc01032015.bibliotecus.model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by Victor on 5/26/2015.
- */
+
 public class Library
 {
-    final public static Library instance = new Library();
+    public final static Library instance = new Library();
     public static Library getInstance()
     {
         return instance;
     }
 
     private User currentUser;
-    private List<Book> books;
-    private List<User> users;
-    private List<Loan> loans;
+    private final ObservableList<Book> books;
+    private final ObservableList<User> users;
+    private final ObservableList<Loan> loans;
     private LocalDate date;
 
     private Library()
     {
-        books = new ArrayList<Book>();
-        users = new ArrayList<User>();
+        books = FXCollections.observableArrayList();
+        users = FXCollections.observableArrayList();
+        loans = FXCollections.observableArrayList();
         currentUser = null;
         date = LocalDate.now();
     }
 
+    public User getCurrentUser()
+    {
+        return currentUser;
+    }
+
+    public ObservableList<Book> getBooks()
+    {
+        return books;
+    }
+
+    public ObservableList<User> getUsers()
+    {
+        return users;
+    }
+
+    public ObservableList<Loan> getLoans()
+    {
+        return loans;
+    }
+
+    public LocalDate getDate()
+    {
+        return date;
+    }
+
+    public void setCurrentUser(User currentUser)
+    {
+        this.currentUser = currentUser;
+    }
+
+    public void setDate(LocalDate date)
+    {
+        this.date = date;
+    }
 }

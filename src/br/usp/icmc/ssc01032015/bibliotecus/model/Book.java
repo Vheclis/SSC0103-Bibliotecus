@@ -55,6 +55,11 @@ public class Book
         return type;
     }
 
+    public String getTypeName()
+    {
+        return type.name;
+    }
+
     public void setType(Type type)
     {
         this.type = type;
