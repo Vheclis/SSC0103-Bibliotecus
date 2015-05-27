@@ -52,7 +52,7 @@ public class MainController implements Initializable
             root = FXMLLoader.load(getClass().getResource("../view/ListUsersTab.fxml"));
             listUsersTab.setContent(root);
 
-            root = FXMLLoader.load(getClass().getResource("../view/myBooksTab.fxml"));
+            root = FXMLLoader.load(getClass().getResource("../view/MyBooksTab.fxml"));
             myBooksTab.setContent(root);
 
             datePicker.setValue(LocalDate.now());

@@ -6,12 +6,12 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.ListLoansTabController">
     <center>
-        <TableView BorderPane.alignment="CENTER">
+        <TableView fx:id="loansTable" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn text="User" />
-                <TableColumn text="Book" />
-                <TableColumn text="Check Out" />
-                <TableColumn text="Check In" />
+                <TableColumn fx:id="userCol" text="User" />
+                <TableColumn fx:id="bookCol" text="Book" />
+                <TableColumn fx:id="checkOutCol" text="Check Out" />
+                <TableColumn fx:id="checkInCol" text="Check In" />
             </columns>
         </TableView>
     </center>
