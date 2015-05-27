@@ -7,13 +7,13 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.MyBooksTab">
    <center>
-      <TableView BorderPane.alignment="CENTER">
+      <TableView BorderPane.alignment="CENTER" fx:id="myBooksTable">
         <columns>
-          <TableColumn text="Book" />
-          <TableColumn text="Check Out" />
-          <TableColumn text="Due Date" />
-          <TableColumn text="Status" />
-          <TableColumn text="Suspension" />
+          <TableColumn text="Book" fx:id="bookCol" />
+          <TableColumn text="Check Out" fx:id="checkOutCol" />
+          <TableColumn text="Due Date" fx:id="dueDateCol" />
+          <TableColumn text="Status" fx:id="statusCol" />
+          <TableColumn text="Suspension" fx:id="suspensionCol" />
         </columns>
       </TableView>
    </center>
