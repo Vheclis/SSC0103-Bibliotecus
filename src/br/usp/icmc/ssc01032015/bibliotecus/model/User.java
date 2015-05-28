@@ -1,39 +1,55 @@
 package br.usp.icmc.ssc01032015.bibliotecus.model;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class User
 {
-    private String name;
-    private Type type;
+    private SimpleStringProperty name;
+    private SimpleObjectProperty<Type> type;
 
     public User(String name, Type type)
     {
-        this.name = name;
-        this.type = type;
+        this.name = new SimpleStringProperty();
+        setName(name);
+
+        this.type = new SimpleObjectProperty<Type>();
+        setType(type);
     }
 
     public String getName()
     {
-        return name;
+        return name.get();
     }
 
     public void setName(String name)
     {
-        this.name = name;
+        this.name.set(name);
     }
 
     public Type getType()
     {
-        return type;
+        return type.get();
     }
 
     public String getTypeName()
     {
-        return type.name;
+        return type.get().name;
     }
 
     public void setType(Type type)
     {
-        this.type = type;
+        this.type.set(type);
+    }
+
+    public SimpleStringProperty nameProperty()
+    {
+        return name;
+    }
+
+    public SimpleObjectProperty<Type> typeProperty()
+    {
+        return type;
     }
 
     public enum Type

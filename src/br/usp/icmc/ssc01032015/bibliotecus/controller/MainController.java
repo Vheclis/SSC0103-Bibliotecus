@@ -1,25 +1,24 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
+import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
+import br.usp.icmc.ssc01032015.bibliotecus.model.User;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 
 public class MainController implements Initializable
 {
-
     @FXML
     private Tab listBooksTab;
 
@@ -35,11 +34,14 @@ public class MainController implements Initializable
     @FXML
     private DatePicker datePicker;
 
+    @FXML
+    private Label currentUserLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-
+        Library.getInstance().currentUserProperty().addListener(
+                (observable, oldValue, newValue) -> onCurrentUserChanged(newValue));
         try
         {
             Parent root;
@@ -55,7 +57,7 @@ public class MainController implements Initializable
             root = FXMLLoader.load(getClass().getResource("../view/MyBooksTab.fxml"));
             myBooksTab.setContent(root);
 
-            datePicker.setValue(LocalDate.now());
+            datePicker.setValue(Library.getInstance().getDate());
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -117,6 +119,19 @@ public class MainController implements Initializable
     public void loansExport(ActionEvent actionEvent)
     {
 
+    }
+
+    private void onCurrentUserChanged(User newUser)
+    {
+        if(newUser != null)
+        {
+            currentUserLabel.setText(newUser.getName());
+            myBooksTab.setDisable(false);
+        }
+        else
+        {
+            currentUserLabel.setText("None");
+        }
     }
 
     

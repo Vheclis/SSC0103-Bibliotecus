@@ -28,11 +28,6 @@ public class ListUsersTabController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-
-        Library.getInstance().getUsers().add(new User("Marcus", User.Type.Community));
-        Library.getInstance().getUsers().add(new User("Mello", User.Type.Professor));
-        Library.getInstance().getUsers().add(new User("Victor", User.Type.Student));
-
         usersTable.setItems(Library.getInstance().getUsers());
 
         nameCol.setCellValueFactory(new PropertyValueFactory<User, String>("name"));

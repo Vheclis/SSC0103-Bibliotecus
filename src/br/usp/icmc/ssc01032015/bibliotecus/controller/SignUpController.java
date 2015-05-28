@@ -1,12 +1,16 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
+import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
 import br.usp.icmc.ssc01032015.bibliotecus.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,10 +39,21 @@ public class SignUpController implements Initializable
 
     /**
      * Called when "Sign up" button was pressed
+     *
      * @param actionEvent
      */
     public void onSignUp(ActionEvent actionEvent)
     {
-        new User(usernameField.getText(), User.Type.valueOf((String) typeBox.getValue()));
+        for (User user : Library.getInstance().getUsers())
+        {
+            if (user.getName().equals(usernameField.getText()))
+            {
+                new Alert(Alert.AlertType.ERROR, "User name already exists!").show();
+                return;
+            }
+        }
+        Library.getInstance().getUsers().add(new User(usernameField.getText(), User.Type.valueOf((String) typeBox.getValue())));
+        ((Stage)usernameField.getScene().getWindow()).close();
+
     }
 }

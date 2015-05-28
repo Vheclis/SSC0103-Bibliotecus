@@ -47,7 +47,13 @@
    <bottom>
       <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-            <DatePicker fx:id="datePicker" />
+            <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="5.0">
+               <children>
+                  <Label text="Current User:" HBox.hgrow="NEVER" />
+                  <Label fx:id="currentUserLabel" text="None" />
+                  <DatePicker fx:id="datePicker" />
+               </children>
+            </HBox>
         </items>
       </ToolBar>
    </bottom>

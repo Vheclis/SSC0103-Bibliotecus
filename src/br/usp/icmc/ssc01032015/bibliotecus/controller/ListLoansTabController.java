@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class ListLoansTabController implements Initializable
@@ -39,7 +40,6 @@ public class ListLoansTabController implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
 
-        Library.getInstance().getLoans().add(new Loan(new User("abc", User.Type.Professor), new Book("A Terra e os Devaneios da Vontade", "Gaston Bachelard", Book.Type.General, 3)));
         loansTable.setItems(Library.getInstance().getLoans());
         bookCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>()
         {

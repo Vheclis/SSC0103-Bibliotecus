@@ -11,7 +11,7 @@
           <TableColumn fx:id="titleCol" minWidth="200.0" text="Title" />
           <TableColumn fx:id="authorCol" minWidth="200.0" text="Author" />
           <TableColumn fx:id="typeCol" minWidth="50.0" text="Type" />
-          <TableColumn fx:id="quantityCol" minWidth="25" text="Quantity" />
+          <TableColumn fx:id="quantityCol" minWidth="80" text="Quantity" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

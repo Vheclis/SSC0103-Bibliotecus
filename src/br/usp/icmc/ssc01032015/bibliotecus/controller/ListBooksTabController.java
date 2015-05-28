@@ -31,9 +31,6 @@ public class ListBooksTabController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        Library.getInstance().getBooks().add(new Book("A Terra e os Devaneios da Vontade", "Gaston Bachelard", Book.Type.General, 3));
-        Library.getInstance().getBooks().add(new Book("A Terra e os Devaneios da Vontade", "Gaston Bachelard", Book.Type.General, 3));
-
         booksTable.setItems(Library.getInstance().getBooks());
 
         titleCol.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));

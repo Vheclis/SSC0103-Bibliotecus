@@ -1,5 +1,6 @@
 package br.usp.icmc.ssc01032015.bibliotecus.model;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.time.LocalDate;
@@ -13,24 +14,24 @@ public class Library
         return instance;
     }
 
-    private User currentUser;
+    private SimpleObjectProperty<User> currentUser;
     private final ObservableList<Book> books;
     private final ObservableList<User> users;
     private final ObservableList<Loan> loans;
-    private LocalDate date;
+    private SimpleObjectProperty<LocalDate> date;
 
     private Library()
     {
         books = FXCollections.observableArrayList();
         users = FXCollections.observableArrayList();
         loans = FXCollections.observableArrayList();
-        currentUser = null;
-        date = LocalDate.now();
+        currentUser = new SimpleObjectProperty<User>(null);
+        date = new SimpleObjectProperty<LocalDate>(LocalDate.now());
     }
 
     public User getCurrentUser()
     {
-        return currentUser;
+        return currentUser.get();
     }
 
     public ObservableList<Book> getBooks()
@@ -50,16 +51,26 @@ public class Library
 
     public LocalDate getDate()
     {
-        return date;
+        return date.get();
     }
 
     public void setCurrentUser(User currentUser)
     {
-        this.currentUser = currentUser;
+        this.currentUser.set(currentUser);
     }
 
     public void setDate(LocalDate date)
     {
-        this.date = date;
+        this.date.set(date);
+    }
+
+    public SimpleObjectProperty<User> currentUserProperty()
+    {
+        return currentUser;
+    }
+
+    public SimpleObjectProperty<LocalDate> dateProperty()
+    {
+        return date;
     }
 }

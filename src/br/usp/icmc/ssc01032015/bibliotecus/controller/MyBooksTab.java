@@ -1,6 +1,7 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
-
+import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
+import br.usp.icmc.ssc01032015.bibliotecus.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -31,6 +32,11 @@ public class MyBooksTab implements Initializable
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
+    {
+        Library.getInstance().currentUserProperty().addListener((observable, oldValue, newValue) -> onUserChange(newValue));
+    }
+
+    private void onUserChange(User newUser)
     {
 
     }
