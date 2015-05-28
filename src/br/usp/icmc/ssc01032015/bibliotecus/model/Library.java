@@ -20,26 +20,18 @@ public class Library
 
     private SimpleObjectProperty<User> currentUser;
 
-    private final List<Book> allBooks;
     private final ObservableList<Book> books;
-
-    private final List<User> allUsers;
     private final ObservableList<User> users;
-
-    private final List<Loan> allLoans;
     private final ObservableList<Loan> loans;
 
     private SimpleObjectProperty<LocalDate> date;
 
     private Library()
     {
-        allBooks = new ArrayList<>();
         books = FXCollections.observableArrayList();
 
-        allUsers = new ArrayList<>();
         users = FXCollections.observableArrayList();
 
-        allLoans = new ArrayList<>();
         loans = FXCollections.observableArrayList();
         loans.addListener(this::onLoansChanged);
 

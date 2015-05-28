@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 
 <BorderPane xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.MyBooksTab">
    <center>
-      <TableView BorderPane.alignment="CENTER" fx:id="myBooksTable">
+      <TableView fx:id="myBooksTable" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn text="Book" fx:id="bookCol" />
-          <TableColumn text="Check Out" fx:id="checkOutCol" />
-          <TableColumn text="Due Date" fx:id="dueDateCol" />
-          <TableColumn text="Status" fx:id="statusCol" />
-          <TableColumn text="Suspension" fx:id="suspensionCol" />
+          <TableColumn fx:id="bookCol" text="Book" />
+          <TableColumn fx:id="checkOutCol" text="Check Out" />
+          <TableColumn fx:id="dueDateCol" text="Due Date" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </center>
 </BorderPane>

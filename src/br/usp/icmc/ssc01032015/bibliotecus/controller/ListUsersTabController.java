@@ -4,7 +4,6 @@ import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
 import br.usp.icmc.ssc01032015.bibliotecus.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,13 +14,13 @@ import java.util.ResourceBundle;
 public class ListUsersTabController implements Initializable
 {
     @FXML
-    private TableView usersTable;
+    private TableView<User> usersTable;
 
     @FXML
-    private TableColumn nameCol;
+    private TableColumn<User, String> nameCol;
 
     @FXML
-    private TableColumn typeCol;
+    private TableColumn<User, String> typeCol;
 
 
 
@@ -32,6 +31,5 @@ public class ListUsersTabController implements Initializable
 
         nameCol.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
         typeCol.setCellValueFactory(new PropertyValueFactory<User, String>("typeName"));
-
     }
 }

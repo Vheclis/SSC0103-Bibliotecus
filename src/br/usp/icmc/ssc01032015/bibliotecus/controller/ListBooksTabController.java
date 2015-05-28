@@ -56,8 +56,7 @@ public class ListBooksTabController implements Initializable
         totalCol.setCellValueFactory(new PropertyValueFactory<Book, Integer>("totalQuantity"));
         availableCol.setCellValueFactory(new PropertyValueFactory<Book, Integer>("currentQuantity"));
 
-        typeCol.setCellValueFactory(param ->
-                new SimpleStringProperty(((Book)((TableColumn.CellDataFeatures)param).getValue()).getType().name));
+        typeCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getType().name));
 
         Library.getInstance().currentUserProperty()
                 .addListener((observable, oldValue, newValue) -> onChangeUser(newValue));
