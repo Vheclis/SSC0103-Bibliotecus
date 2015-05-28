@@ -1,7 +1,6 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
 import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
-import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
 import br.usp.icmc.ssc01032015.bibliotecus.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -40,13 +39,14 @@ public class ListUsersTabController implements Initializable
         usersView = FXCollections.observableArrayList();
         usersTable.setItems(usersView);
 
-        //update table when date or users are changed
+        //update table when date or users are onCurrentDateChange
         Library.getInstance().currentDateProperty().addListener((observable, oldValue, newValue) -> updateUsers());
         Library.getInstance().getUsers().addListener((ListChangeListener.Change<? extends User> c) -> updateUsers());
     }
 
     private void updateUsers()
     {
+        //users registered until library's current day
         List<User> users =
                 Library.getInstance().getUsers()
                         .filtered(user ->

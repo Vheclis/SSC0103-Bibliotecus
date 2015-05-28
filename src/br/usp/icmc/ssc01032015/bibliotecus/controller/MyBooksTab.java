@@ -16,7 +16,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class MyBooksTab implements Initializable
 {
@@ -55,9 +54,7 @@ public class MyBooksTab implements Initializable
     private void updateMyBooks()
     {
         List<Loan> loans = Library.getInstance().getLoans()
-                .stream()
-                .filter(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()))
-                .collect(Collectors.toList());
+                .filtered(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()));
 
         myLoans.setAll(loans);
     }

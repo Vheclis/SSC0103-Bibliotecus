@@ -8,9 +8,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-/**
- * Created by Victor on 5/26/2015.
- */
 public class SignInController
 {
     @FXML
@@ -19,20 +16,25 @@ public class SignInController
     public void onSignIn(ActionEvent actionEvent)
     {
         String username = usernameField.getText();
-
-        for(User user : Library.getInstance().getUsers())
+        try
         {
-            if(user.getName().equals(username))
-            {
-                Library.getInstance().setCurrentUser(user);
-                Stage stage = ((Stage)usernameField.getScene().getWindow());
-                if(stage != null)
-                {
-                    stage.close();
-                }
-                return;
-            }
+            User newUser = Library.getInstance().getUsers().filtered(user -> user.getName().equals(username)).get(0);
+            Library.getInstance().setCurrentUser(newUser);
+
+            //welcome user
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Welcome");
+            alert.setContentText(newUser.getName() + " logged in");
+            alert.show();
+
+            ((Stage)usernameField.getScene().getWindow()).close();
+        } catch(IndexOutOfBoundsException ex)
+        {
+            //User doesn't exist
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Couldn't sign in");
+            alert.setContentText("User with name "+ username + " was not found");
+            alert.show();
         }
-        new Alert(Alert.AlertType.INFORMATION, "User not found!").show();
     }
 }

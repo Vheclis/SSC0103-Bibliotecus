@@ -1,11 +1,14 @@
 package br.usp.icmc.ssc01032015.bibliotecus.model;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.Optional;
 
 
 public class Library
@@ -17,25 +20,34 @@ public class Library
         return instance;
     }
 
-    private SimpleObjectProperty<User> currentUser;
-
     private final ObservableList<Book> books;
     private final ObservableList<User> users;
     private final ObservableList<Loan> loans;
 
+    private SimpleObjectProperty<User> currentUser;
     private SimpleObjectProperty<LocalDate> currentDate;
+    private SimpleObjectProperty<LocalDate> newestLoanDate;
 
     private Library()
     {
         books = FXCollections.observableArrayList();
-
         users = FXCollections.observableArrayList();
 
         loans = FXCollections.observableArrayList();
         loans.addListener(this::onLoansChanged);
 
         currentUser = new SimpleObjectProperty<>(null);
+        newestLoanDate = new SimpleObjectProperty<>(LocalDate.MIN);
         currentDate = new SimpleObjectProperty<>(LocalDate.now());
+        currentDateProperty().addListener(this::onCurrentDateChange);
+    }
+
+    public void onCurrentDateChange(ObservableValue<? extends LocalDate> prop, LocalDate oldDate, LocalDate newDate)
+    {
+        for(Book book : books)
+        {
+            book.setCurrentQuantity(calculateCopiesInStock(book));
+        }
     }
 
     private void onLoansChanged(ListChangeListener.Change<? extends Loan> change)
@@ -46,6 +58,12 @@ public class Library
             {
                 loan.getBook().setCurrentQuantity(loan.getBook().getCurrentQuantity()-1);
             }
+        }
+
+        Optional<Loan> maxLoan= loans.stream().max(Comparator.comparingLong(loan -> loan.getCheckOut().toEpochDay()));
+        if(maxLoan.isPresent())
+        {
+            newestLoanDate.set(maxLoan.get().getCheckOut());
         }
     }
 
@@ -76,6 +94,7 @@ public class Library
         if (book == null) return 0;
         long copiesLent = getLoans()
                 .stream()
+                .filter(loan -> loan.getCheckOut().toEpochDay() <= getCurrentDate().toEpochDay())
                 .filter(loan -> loan.getBook().getTitle().equals(book.getTitle()))
                 .filter(loan -> loan.getCheckIn() == null)
                 .count();
@@ -158,5 +177,15 @@ public class Library
     public SimpleObjectProperty<LocalDate> currentDateProperty()
     {
         return currentDate;
+    }
+
+    public LocalDate getNewestLoanDate()
+    {
+        return newestLoanDate.get();
+    }
+
+    public SimpleObjectProperty<LocalDate> newestLoanDateProperty()
+    {
+        return newestLoanDate;
     }
 }

@@ -43,16 +43,30 @@ public class SignUpController implements Initializable
      */
     public void onSignUp(ActionEvent actionEvent)
     {
-        for (User user : Library.getInstance().getUsers())
+        int usersCount =
+                Library.getInstance().getUsers()
+                        .filtered(user -> user.getName().equals(usernameField.getText())).size();
+        if(usersCount > 0)
         {
-            if (user.getName().equals(usernameField.getText()))
-            {
-                new Alert(Alert.AlertType.ERROR, "User name already exists!").show();
-                return;
-            }
+            //user already exists
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Duplicate user");
+            alert.setContentText("There is already a user with this name");
+            alert.show();
+            return;
         }
-        Library.getInstance().getUsers().add(new User(usernameField.getText(), User.Type.valueOf((String) typeBox.getValue())));
-        ((Stage)usernameField.getScene().getWindow()).close();
 
+        //add user
+        User user = new User(usernameField.getText(), User.Type.valueOf((String) typeBox.getValue()));
+        Library.getInstance().getUsers().add(user);
+
+        //alert success
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Sign up Successful");
+        alert.setContentText(user.getName() + " signed up");
+        alert.show();
+
+        //close window
+        ((Stage) usernameField.getScene().getWindow()).close();
     }
 }

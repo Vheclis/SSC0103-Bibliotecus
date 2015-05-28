@@ -1,6 +1,5 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
-
 import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,7 +15,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Observable;
 import java.util.ResourceBundle;
 
 public class ListLoansTabController implements Initializable
@@ -63,6 +61,7 @@ public class ListLoansTabController implements Initializable
 
     private void updateLoans()
     {
+        //loans checked out unitl library's current date
         List<Loan> loans =
                 Library.getInstance().getLoans()
                         .filtered(loan ->

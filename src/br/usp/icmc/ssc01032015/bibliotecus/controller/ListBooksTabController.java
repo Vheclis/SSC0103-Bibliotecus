@@ -16,8 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -61,20 +61,25 @@ public class ListBooksTabController implements Initializable
         booksTable.setItems(booksView);
 
 
-        //update table when date or books are changed
+        //update table when date or books are onCurrentDateChange
         Library.getInstance().currentDateProperty().addListener((observable, oldValue, newValue) -> updateTable());
         Library.getInstance().getBooks().addListener((ListChangeListener.Change<? extends Book> c) -> updateTable());
 
-        //enable-disable borrow button if not logged in
+        //enable-disable borrow button if not logged in or read only state
         Library.getInstance().currentUserProperty()
-                .addListener((observable, oldValue, newValue) -> onChangeUser(newValue));
+                .addListener((observable, oldValue, newValue) -> updateBorrowButton());
+        Library.getInstance().newestLoanDateProperty()
+                .addListener((observable, oldValue, newValue) -> updateBorrowButton());
+        Library.getInstance().currentDateProperty()
+                .addListener((observable, oldValue, newValue) -> updateBorrowButton());
 
         //start logged out
-        onChangeUser(null);
+        updateBorrowButton();
     }
 
     private void updateTable()
     {
+        //books registered until library's current date
         List<Book> books =
                 Library.getInstance().getBooks()
                         .filtered(book ->
@@ -87,9 +92,13 @@ public class ListBooksTabController implements Initializable
         booksView.setAll(books);
     }
 
-    private void onChangeUser(User newUser)
+    private void updateBorrowButton()
     {
-        borrowButton.setDisable(newUser == null);
+        Library library = Library.getInstance();
+        if(library.getCurrentUser() == null
+                || library.getCurrentDate().toEpochDay() < library.getNewestLoanDate().toEpochDay())
+            borrowButton.setDisable(true);
+        else borrowButton.setDisable(false);
     }
 
     public void onBorrow(ActionEvent actionEvent)
@@ -101,19 +110,32 @@ public class ListBooksTabController implements Initializable
         int daysSuspended = library.calculateUserSuspension(currentUser);
         if(daysSuspended > 0)
         {
-            new Alert(Alert.AlertType.ERROR,
-                    "You can not borrow any book until " + library.getCurrentDate().plusDays(daysSuspended)).show();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("You are suspended");
+            alert.setContentText("You can not borrow any book until "
+                    + library.getCurrentDate().plusDays(daysSuspended));
+            alert.show();
             return;
         }
 
+        //test for selected book
         Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
         if(selectedBook == null || selectedBook.getCurrentQuantity() == 0)
         {
-            new Alert(Alert.AlertType.ERROR,
-                    "There are no copies of this book available").show();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Book unavailable");
+            alert.setContentText("There are no copies of this book in stock");
+            alert.show();
             return;
         }
 
-        library.getLoans().add(new Loan(currentUser, selectedBook, library.getCurrentDate()));
+        //add loan
+        Loan loan = new Loan(currentUser, selectedBook, library.getCurrentDate());
+        library.getLoans().add(loan);
+
+        //warn due date
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("You have borrowed \"" + loan.getBook().getTitle()+ "\"");
+        alert.setContentText("Return it until " + loan.getDueDate());
     }
 }
