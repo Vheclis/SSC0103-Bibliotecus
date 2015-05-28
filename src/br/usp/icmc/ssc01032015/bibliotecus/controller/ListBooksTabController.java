@@ -6,6 +6,7 @@ import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
 import br.usp.icmc.ssc01032015.bibliotecus.model.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,13 +16,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class ListBooksTabController implements Initializable
 {
@@ -46,32 +44,52 @@ public class ListBooksTabController implements Initializable
     @FXML
     private Button borrowButton;
 
+    private ObservableList<Book> booksView;
+
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        booksTable.setItems(Library.getInstance().getBooks());
-
+        //table column bindings
         titleCol.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
         authorCol.setCellValueFactory(new PropertyValueFactory<Book, String>("author"));
         totalCol.setCellValueFactory(new PropertyValueFactory<Book, Integer>("totalQuantity"));
         availableCol.setCellValueFactory(new PropertyValueFactory<Book, Integer>("currentQuantity"));
-
         typeCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getType().name));
 
+        //table binding
+        booksView = FXCollections.observableArrayList();
+        booksTable.setItems(booksView);
+
+
+        //update table when date or books are changed
+        Library.getInstance().currentDateProperty().addListener((observable, oldValue, newValue) -> updateTable());
+        Library.getInstance().getBooks().addListener((ListChangeListener.Change<? extends Book> c) -> updateTable());
+
+        //enable-disable borrow button if not logged in
         Library.getInstance().currentUserProperty()
                 .addListener((observable, oldValue, newValue) -> onChangeUser(newValue));
-        onChangeUser(null);
 
-        Library.getInstance().dateProperty().addListener((observable, oldValue, newValue) -> onChangeDate(newValue));
+        //start logged out
+        onChangeUser(null);
+    }
+
+    private void updateTable()
+    {
+        List<Book> books =
+                Library.getInstance().getBooks()
+                        .filtered(book ->
+                        {
+                            long registration = book.getRegistration().toEpochDay();
+                            long today = Library.getInstance().getCurrentDate().toEpochDay();
+                            return registration <= today;
+                        });
+
+        booksView.setAll(books);
     }
 
     private void onChangeUser(User newUser)
     {
         borrowButton.setDisable(newUser == null);
-    }
-
-    private void onChangeDate(LocalDate newDate)
-    {
     }
 
     public void onBorrow(ActionEvent actionEvent)
@@ -84,7 +102,7 @@ public class ListBooksTabController implements Initializable
         if(daysSuspended > 0)
         {
             new Alert(Alert.AlertType.ERROR,
-                    "You can not borrow any book until " + library.getDate().plusDays(daysSuspended)).show();
+                    "You can not borrow any book until " + library.getCurrentDate().plusDays(daysSuspended)).show();
             return;
         }
 
@@ -96,6 +114,6 @@ public class ListBooksTabController implements Initializable
             return;
         }
 
-        library.getLoans().add(new Loan(currentUser, selectedBook, library.getDate()));
+        library.getLoans().add(new Loan(currentUser, selectedBook, library.getCurrentDate()));
     }
 }

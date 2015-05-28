@@ -2,11 +2,9 @@ package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
 import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
-import br.usp.icmc.ssc01032015.bibliotecus.model.User;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,8 +14,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -41,22 +37,26 @@ public class MyBooksTab implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        Library.getInstance().currentUserProperty()
-                .addListener((observable, oldValue, newValue) -> onUserChange(newValue));
-
-        bookCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getUser().getName()));
+        //table column bindings
+        bookCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBook().getTitle()));
         checkOutCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("checkOut"));
         dueDateCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("dueDate"));
 
+        //table bindings
         myLoans = FXCollections.observableArrayList();
         myBooksTable.setItems(myLoans);
+
+        //update my books when user
+        Library.getInstance().currentUserProperty().addListener((observable, oldValue, newValue) -> updateMyBooks());
+        Library.getInstance().currentDateProperty().addListener((observable, oldValue, newValue) -> updateMyBooks());
+        Library.getInstance().getLoans().addListener((ListChangeListener.Change<? extends Loan> c) -> updateMyBooks());
     }
 
-    private void onUserChange(User newUser)
+    private void updateMyBooks()
     {
         List<Loan> loans = Library.getInstance().getLoans()
                 .stream()
-                .filter(loan -> loan.getUser().getName().equals(newUser.getName()))
+                .filter(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()))
                 .collect(Collectors.toList());
 
         myLoans.setAll(loans);

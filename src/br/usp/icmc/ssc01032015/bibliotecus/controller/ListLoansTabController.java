@@ -4,7 +4,6 @@ package br.usp.icmc.ssc01032015.bibliotecus.controller;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -16,8 +15,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Observable;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class ListLoansTabController implements Initializable
 {
@@ -39,23 +39,39 @@ public class ListLoansTabController implements Initializable
     @FXML
     private TableColumn<Loan, LocalDate> dueDateCol;
 
+    private ObservableList<Loan> loansView;
+
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        //table column bindings
         checkOutCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("checkOut"));
         checkInCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("checkIn"));
         dueDateCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("dueDate"));
         bookCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBook().getTitle()));
         userCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getUser().getName()));
 
-        loansTable.setItems(Library.getInstance().getLoans());
+        //table binding
+        loansView = FXCollections.observableArrayList();
+        loansTable.setItems(loansView);
 
-//        Library.getInstance().dateProperty().addListener((observable, oldValue, newValue) -> onChangeDate(newValue));
-//        onChangeDate(LocalDate.now());
+        //update table when loans, current date or user change
+        Library.getInstance().getLoans().addListener((ListChangeListener.Change<? extends Loan> c) -> updateLoans());
+        Library.getInstance().currentDateProperty().addListener((observable, oldValue, newValue) -> updateLoans());
+        Library.getInstance().currentUserProperty().addListener((observable, oldValue, newValue) -> updateLoans());
     }
 
-    private void onChangeDate(LocalDate newDate)
+    private void updateLoans()
     {
-//        loansTable.setItems(loans);
+        List<Loan> loans =
+                Library.getInstance().getLoans()
+                        .filtered(loan ->
+                        {
+                            long checkout = loan.getCheckOut().toEpochDay();
+                            long today = Library.getInstance().getCurrentDate().toEpochDay();
+                            return checkout <= today;
+                        });
+
+        loansView.setAll(loans);
     }
 }

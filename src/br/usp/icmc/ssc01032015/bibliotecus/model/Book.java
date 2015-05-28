@@ -3,6 +3,9 @@ package br.usp.icmc.ssc01032015.bibliotecus.model;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+
+import java.time.LocalDate;
 
 public class Book
 {
@@ -31,6 +34,8 @@ public class Book
      */
     private SimpleIntegerProperty currentQuantity;
 
+    private SimpleObjectProperty<LocalDate> registration;
+
     public Book(String title, String author, Type type, int totalQuantity)
     {
         this.title = new SimpleStringProperty();
@@ -47,6 +52,9 @@ public class Book
 
         this.currentQuantity = new SimpleIntegerProperty();
         setCurrentQuantity(totalQuantity);
+
+        this.registration = new SimpleObjectProperty<>();
+        setRegistration(Library.getInstance().getCurrentDate());
     }
 
     public void addCopies(int quantity)
@@ -95,11 +103,6 @@ public class Book
         this.totalQuantity.set(totalQuantity);
     }
 
-    public void addTotalQuantity(int quantity)
-    {
-        totalQuantity.set(totalQuantity.get()+ quantity);
-    }
-
     public SimpleStringProperty titleProperty()
     {
         return title;
@@ -135,10 +138,21 @@ public class Book
         this.currentQuantity.set(currentQuantity);
     }
 
-    public void decreaseCurrentQuantity()
+    public LocalDate getRegistration()
     {
-        this.currentQuantity.set(currentQuantity.get() - 1);
+        return registration.get();
     }
+
+    public SimpleObjectProperty<LocalDate> registrationProperty()
+    {
+        return registration;
+    }
+
+    public void setRegistration(LocalDate registration)
+    {
+        this.registration.set(registration);
+    }
+
     public enum Type
     {
         General("General"),

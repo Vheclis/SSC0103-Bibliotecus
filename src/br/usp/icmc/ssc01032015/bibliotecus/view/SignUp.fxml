@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.*?>
-
-
 <?import java.lang.String?>
 <GridPane hgap="5.0" xmlns="http://javafx.com/javafx/null"
           xmlns:fx="http://javafx.com/fxml/1"

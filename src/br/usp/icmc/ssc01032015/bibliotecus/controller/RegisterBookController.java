@@ -13,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -47,9 +46,8 @@ public class RegisterBookController implements Initializable
 
         if(existingBook.isPresent())
         {
-            existingBook.get().addCopies(quantitySpinner.getValue());
-            new Alert(Alert.AlertType.INFORMATION, "Added " + quantitySpinner.getValue()
-                    + " copies of \"" + existingBook.get().getTitle() + "\"").show();
+            new Alert(Alert.AlertType.INFORMATION,
+                    "There is already a book named \"" +existingBook.get().getTitle() + "\"").show();
         }
         else
         {

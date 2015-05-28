@@ -4,9 +4,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class Library
@@ -24,7 +23,7 @@ public class Library
     private final ObservableList<User> users;
     private final ObservableList<Loan> loans;
 
-    private SimpleObjectProperty<LocalDate> date;
+    private SimpleObjectProperty<LocalDate> currentDate;
 
     private Library()
     {
@@ -35,8 +34,8 @@ public class Library
         loans = FXCollections.observableArrayList();
         loans.addListener(this::onLoansChanged);
 
-        currentUser = new SimpleObjectProperty<User>(null);
-        date = new SimpleObjectProperty<LocalDate>(LocalDate.now());
+        currentUser = new SimpleObjectProperty<>(null);
+        currentDate = new SimpleObjectProperty<>(LocalDate.now());
     }
 
     private void onLoansChanged(ListChangeListener.Change<? extends Loan> change)
@@ -45,7 +44,7 @@ public class Library
         {
             for (Loan loan : change.getAddedSubList())
             {
-                loan.getBook().decreaseCurrentQuantity();
+                loan.getBook().setCurrentQuantity(loan.getBook().getCurrentQuantity()-1);
             }
         }
     }
@@ -64,7 +63,7 @@ public class Library
                     //if loan has not been checked back in,
                     if (checkIn == null)
                     {
-                        checkIn = Library.getInstance().getDate();
+                        checkIn = Library.getInstance().getCurrentDate();
                     }
 
                     int daysAfter = (int) (checkIn.toEpochDay() - dueDate.toEpochDay());
@@ -136,9 +135,9 @@ public class Library
         return loans;
     }
 
-    public LocalDate getDate()
+    public LocalDate getCurrentDate()
     {
-        return date.get();
+        return currentDate.get();
     }
 
     public void setCurrentUser(User currentUser)
@@ -146,9 +145,9 @@ public class Library
         this.currentUser.set(currentUser);
     }
 
-    public void setDate(LocalDate date)
+    public void setCurrentDate(LocalDate currentDate)
     {
-        this.date.set(date);
+        this.currentDate.set(currentDate);
     }
 
     public SimpleObjectProperty<User> currentUserProperty()
@@ -156,8 +155,8 @@ public class Library
         return currentUser;
     }
 
-    public SimpleObjectProperty<LocalDate> dateProperty()
+    public SimpleObjectProperty<LocalDate> currentDateProperty()
     {
-        return date;
+        return currentDate;
     }
 }

@@ -1,6 +1,7 @@
 package br.usp.icmc.ssc01032015.bibliotecus.model;
 
 import javafx.beans.property.SimpleObjectProperty;
+
 import java.time.LocalDate;
 
 public class Loan
@@ -26,7 +27,7 @@ public class Loan
         setCheckIn(null);
 
         this.dueDate = new SimpleObjectProperty<LocalDate>();
-        setDueDate(Library.getInstance().calculateDueDateFor(Library.getInstance().getDate(), user.getType()));
+        setDueDate(Library.getInstance().calculateDueDateFor(Library.getInstance().getCurrentDate(), user.getType()));
     }
 
     public void setUser(User user)

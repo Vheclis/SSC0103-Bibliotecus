@@ -60,7 +60,7 @@ public class MainController implements Initializable
             root = FXMLLoader.load(getClass().getResource("../view/MyBooksTab.fxml"));
             myBooksTab.setContent(root);
 
-            datePicker.setValue(Library.getInstance().getDate());
+            datePicker.setValue(Library.getInstance().getCurrentDate());
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -84,7 +84,7 @@ public class MainController implements Initializable
         Library.getInstance().getUsers().add(new User("estudante", User.Type.Student));
         Library.getInstance().getUsers().add(new User("professor", User.Type.Professor));
         Library.getInstance().getUsers().add(new User("comunidade", User.Type.Community));
-        Library.getInstance().getLoans().add(new Loan(Library.getInstance().getUsers().get(0), Library.getInstance().getBooks().get(0), LocalDate.now()));
+//        Library.getInstance().getLoans().add(new Loan(Library.getInstance().getUsers().get(0), Library.getInstance().getBooks().get(0), LocalDate.now()));
 
         Library.getInstance().setCurrentUser(Library.getInstance().getUsers().get(0));
 
@@ -166,6 +166,6 @@ public class MainController implements Initializable
 
     public void onDateChange(ActionEvent actionEvent)
     {
-        Library.getInstance().setDate(datePicker.getValue());
+        Library.getInstance().setCurrentDate(datePicker.getValue());
     }
 }
