@@ -11,7 +11,7 @@ public class Loan
     private SimpleObjectProperty<LocalDate> checkIn;
     private SimpleObjectProperty<LocalDate> dueDate;
 
-    public Loan(User user, Book book, LocalDate checkOut, LocalDate dueDate)
+    public Loan(User user, Book book, LocalDate checkOut)
     {
         this.user = new SimpleObjectProperty<User>();
         setUser(user);
@@ -26,7 +26,7 @@ public class Loan
         setCheckIn(null);
 
         this.dueDate = new SimpleObjectProperty<LocalDate>();
-        setDueDate(dueDate);
+        setDueDate(Library.getInstance().calculateDueDateFor(Library.getInstance().getDate(), user.getType()));
     }
 
     public void setUser(User user)

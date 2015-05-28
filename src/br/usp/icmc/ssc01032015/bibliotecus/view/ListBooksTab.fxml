@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -11,7 +12,8 @@
           <TableColumn fx:id="titleCol" minWidth="200.0" text="Title" />
           <TableColumn fx:id="authorCol" minWidth="200.0" text="Author" />
           <TableColumn fx:id="typeCol" minWidth="50.0" text="Type" />
-          <TableColumn fx:id="quantityCol" minWidth="80" text="Quantity" />
+          <TableColumn fx:id="availableCol" minWidth="80" text="Available" />
+          <TableColumn fx:id="totalCol" minWidth="80" text="Total" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -21,7 +23,7 @@
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="Borrow" />
+            <Button fx:id="borrowButton" disable="true" mnemonicParsing="true" onAction="#onBorrow" text="_Borrow" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

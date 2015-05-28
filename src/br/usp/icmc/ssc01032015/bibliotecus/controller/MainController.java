@@ -1,6 +1,8 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
+import br.usp.icmc.ssc01032015.bibliotecus.model.Book;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
+import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
 import br.usp.icmc.ssc01032015.bibliotecus.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +16,7 @@ import javafx.scene.control.Tab;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 
@@ -62,6 +65,32 @@ public class MainController implements Initializable
         {
             e.printStackTrace();
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //DEBUG additions
+        Library.getInstance().getBooks().add(new Book("Terra e os Devaneios da Vontade", "Gaston Bachelard", Book.Type.General, 2));
+        Library.getInstance().getUsers().add(new User("estudante", User.Type.Student));
+        Library.getInstance().getUsers().add(new User("professor", User.Type.Professor));
+        Library.getInstance().getUsers().add(new User("comunidade", User.Type.Community));
+        Library.getInstance().getLoans().add(new Loan(Library.getInstance().getUsers().get(0), Library.getInstance().getBooks().get(0), LocalDate.now()));
+
+        Library.getInstance().setCurrentUser(Library.getInstance().getUsers().get(0));
+
+
+
+
     }
 
     public void userSignUp(ActionEvent actionEvent) throws IOException
@@ -134,5 +163,9 @@ public class MainController implements Initializable
         }
     }
 
-    
+
+    public void onDateChange(ActionEvent actionEvent)
+    {
+        Library.getInstance().setDate(datePicker.getValue());
+    }
 }

@@ -1,65 +1,61 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
 
-import br.usp.icmc.ssc01032015.bibliotecus.model.Book;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
-import br.usp.icmc.ssc01032015.bibliotecus.model.User;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ListLoansTabController implements Initializable
 {
     @FXML
-    private TableView loansTable;
+    private TableView<Loan> loansTable;
 
     @FXML
-    private TableColumn userCol;
+    private TableColumn<Loan, String> userCol;
 
     @FXML
-    private TableColumn bookCol;
+    private TableColumn<Loan, String> bookCol;
 
     @FXML
-    private TableColumn checkOutCol;
+    private TableColumn<Loan, LocalDate> checkOutCol;
 
     @FXML
-    private TableColumn checkInCol;
+    private TableColumn<Loan, LocalDate> checkInCol;
 
+    @FXML
+    private TableColumn<Loan, LocalDate> dueDateCol;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        checkOutCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("checkOut"));
+        checkInCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("checkIn"));
+        dueDateCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("dueDate"));
+        bookCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBook().getTitle()));
+        userCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getUser().getName()));
 
         loansTable.setItems(Library.getInstance().getLoans());
-        bookCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>()
-        {
-            @Override
-            public ObservableValue call(TableColumn.CellDataFeatures param)
-            {
-                return new SimpleStringProperty(((Loan) param.getValue()).getBook().getTitle());
-            }
-        });
 
-        userCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures, ObservableValue>()
-        {
-            @Override
-            public ObservableValue call(TableColumn.CellDataFeatures param)
-            {
-                return new SimpleStringProperty(((Loan) param.getValue()).getUser().getName());
-            }
-        });
+//        Library.getInstance().dateProperty().addListener((observable, oldValue, newValue) -> onChangeDate(newValue));
+//        onChangeDate(LocalDate.now());
+    }
 
-        checkOutCol.setCellValueFactory(new PropertyValueFactory<Loan, String>("checkOut"));
-        checkInCol.setCellValueFactory(new PropertyValueFactory<Loan, String>("checkIn"));
+    private void onChangeDate(LocalDate newDate)
+    {
+//        loansTable.setItems(loans);
     }
 }

@@ -26,6 +26,11 @@ public class Book
      */
     private SimpleIntegerProperty totalQuantity;
 
+    /**
+     * Numbers of copies
+     */
+    private SimpleIntegerProperty currentQuantity;
+
     public Book(String title, String author, Type type, int totalQuantity)
     {
         this.title = new SimpleStringProperty();
@@ -39,6 +44,15 @@ public class Book
 
         this.totalQuantity = new SimpleIntegerProperty();
         setTotalQuantity(totalQuantity);
+
+        this.currentQuantity = new SimpleIntegerProperty();
+        setCurrentQuantity(totalQuantity);
+    }
+
+    public void addCopies(int quantity)
+    {
+        totalQuantity.set(totalQuantity.get() + quantity);
+        currentQuantity.set(currentQuantity.get() + quantity);
     }
 
     public String getTitle()
@@ -64,11 +78,6 @@ public class Book
     public Type getType()
     {
         return type.get();
-    }
-
-    public String getTypeName()
-    {
-        return type.get().name;
     }
 
     public void setType(Type type)
@@ -111,6 +120,25 @@ public class Book
         return totalQuantity;
     }
 
+    public int getCurrentQuantity()
+    {
+        return currentQuantity.get();
+    }
+
+    public SimpleIntegerProperty currentQuantityProperty()
+    {
+        return currentQuantity;
+    }
+
+    public void setCurrentQuantity(int currentQuantity)
+    {
+        this.currentQuantity.set(currentQuantity);
+    }
+
+    public void decreaseCurrentQuantity()
+    {
+        this.currentQuantity.set(currentQuantity.get() - 1);
+    }
     public enum Type
     {
         General("General"),

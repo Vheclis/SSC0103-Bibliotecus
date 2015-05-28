@@ -54,19 +54,15 @@ public class User
 
     public enum Type
     {
-        Student("Student", 4, 15),
-        Professor("Professor", 6, 60),
-        Community("Community", 2, 15);
+        Student("Student"),
+        Professor("Professor"),
+        Community("Community");
 
         final String name;
-        final int maxLoans;
-        final int maxDays;
 
-        Type(String name, int maxLoans, int maxDays)
+        Type(String name)
         {
             this.name = name;
-            this.maxLoans = maxLoans;
-            this.maxDays = maxDays;
         }
     }
 }

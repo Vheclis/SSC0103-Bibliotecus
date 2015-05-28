@@ -51,7 +51,7 @@
                <children>
                   <Label text="Current User:" HBox.hgrow="NEVER" />
                   <Label fx:id="currentUserLabel" text="None" />
-                  <DatePicker fx:id="datePicker" />
+                  <DatePicker fx:id="datePicker" onAction="#onDateChange" />
                </children>
             </HBox>
         </items>

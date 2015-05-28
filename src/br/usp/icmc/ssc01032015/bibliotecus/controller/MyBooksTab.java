@@ -33,7 +33,8 @@ public class MyBooksTab implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        Library.getInstance().currentUserProperty().addListener((observable, oldValue, newValue) -> onUserChange(newValue));
+        Library.getInstance().currentUserProperty()
+                .addListener((observable, oldValue, newValue) -> onUserChange(newValue));
     }
 
     private void onUserChange(User newUser)

@@ -47,7 +47,7 @@ public class RegisterBookController implements Initializable
 
         if(existingBook.isPresent())
         {
-            existingBook.get().addTotalQuantity(quantitySpinner.getValue());
+            existingBook.get().addCopies(quantitySpinner.getValue());
             new Alert(Alert.AlertType.INFORMATION, "Added " + quantitySpinner.getValue()
                     + " copies of \"" + existingBook.get().getTitle() + "\"").show();
         }
