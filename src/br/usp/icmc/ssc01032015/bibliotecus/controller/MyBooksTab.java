@@ -57,6 +57,8 @@ public class MyBooksTab implements Initializable
     {
         List<Loan> loans = Library.getInstance().getLoans()
                 .filtered(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()))
+                .filtered(loan -> loan.getCheckOut().isBefore(Library.getInstance().getCurrentDate()) 
+                        || loan.getCheckOut().isEqual(Library.getInstance().getCurrentDate()))
                 .filtered(loan -> loan.getCheckIn() == null);
         myLoans.setAll(loans);
 
@@ -66,8 +68,8 @@ public class MyBooksTab implements Initializable
 
         Loan selectedLoan = myBooksTable.getSelectionModel().getSelectedItem();
         selectedLoan.setCheckIn(Library.getInstance().getCurrentDate());
-        myLoans.remove(selectedLoan);
-        myLoans.add(selectedLoan);
+        Library.getInstance().getLoans().remove(selectedLoan);
+        Library.getInstance().getLoans().add(selectedLoan);
         //updateMyBooks();
     }
 }
