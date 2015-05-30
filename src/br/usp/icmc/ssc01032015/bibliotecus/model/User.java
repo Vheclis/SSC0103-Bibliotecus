@@ -1,11 +1,15 @@
 package br.usp.icmc.ssc01032015.bibliotecus.model;
 
+import br.usp.icmc.ssc01032015.bibliotecus.serialization.CSVSerializable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-public class User
+public class User extends CSVSerializable
 {
     private SimpleStringProperty name;
     private SimpleObjectProperty<Type> type;
@@ -13,7 +17,9 @@ public class User
 
     public User()
     {
-
+        this.name = new SimpleStringProperty();
+        this.type = new SimpleObjectProperty<>();
+        this.registration = new SimpleObjectProperty<>();
     }
 
     public User(String name, Type type)
@@ -76,6 +82,22 @@ public class User
     public void setRegistration(LocalDate registration)
     {
         this.registration.set(registration);
+    }
+
+    @Override
+    protected List<String> customOutputData() {
+        List<String> data = new ArrayList<>();
+        data.add(getName());
+        data.add(getTypeName());
+        data.add(getRegistration().toString());
+        return data;
+    }
+
+    @Override
+    public void customInputData(Iterator<String> itr) {
+        setName(itr.next());
+        setType(User.Type.valueOf(itr.next()));
+        setRegistration(LocalDate.parse(itr.next()));
     }
 
     public enum Type

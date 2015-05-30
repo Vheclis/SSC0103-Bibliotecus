@@ -122,8 +122,11 @@ public class MainController implements Initializable
         CSVSerializer.write(b2, System.out);
     }
 
-    public void usersExport(ActionEvent actionEvent)
-    {
+    public void usersExport(ActionEvent actionEvent) throws IllegalAccessException, IOException, InstantiationException {
+        User user = new User("Pedro", User.Type.Student);
+        CSVSerializer.write(user, System.out);
+        User u2 = CSVSerializer.read(System.in, User.class);
+        CSVSerializer.write(u2, System.out);
 
     }
 

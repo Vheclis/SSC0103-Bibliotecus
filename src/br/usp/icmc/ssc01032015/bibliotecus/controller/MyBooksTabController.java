@@ -1,22 +1,22 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
-import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
-import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+        import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
+        import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
+        import javafx.beans.property.SimpleStringProperty;
+        import javafx.collections.FXCollections;
+        import javafx.collections.ListChangeListener;
+        import javafx.collections.ObservableList;
+        import javafx.event.ActionEvent;
+        import javafx.fxml.FXML;
+        import javafx.fxml.Initializable;
+        import javafx.scene.control.TableColumn;
+        import javafx.scene.control.TableView;
+        import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.ResourceBundle;
+        import java.net.URL;
+        import java.time.LocalDate;
+        import java.util.List;
+        import java.util.ResourceBundle;
 
 public class MyBooksTabController implements Initializable
 {
@@ -57,7 +57,7 @@ public class MyBooksTabController implements Initializable
     {
         List<Loan> loans = Library.getInstance().getLoans()
                 .filtered(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()))
-                .filtered(loan -> loan.getCheckOut().isBefore(Library.getInstance().getCurrentDate()) 
+                .filtered(loan -> loan.getCheckOut().isBefore(Library.getInstance().getCurrentDate())
                         || loan.getCheckOut().isEqual(Library.getInstance().getCurrentDate()))
                 .filtered(loan -> loan.getCheckIn() == null);
         myLoans.setAll(loans);

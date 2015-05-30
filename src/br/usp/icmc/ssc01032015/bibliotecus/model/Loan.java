@@ -1,10 +1,14 @@
 package br.usp.icmc.ssc01032015.bibliotecus.model;
 
+import br.usp.icmc.ssc01032015.bibliotecus.serialization.CSVSerializable;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-public class Loan
+public class Loan extends CSVSerializable
 {
     private SimpleObjectProperty<User> user;
     private SimpleObjectProperty<Book> book;
@@ -14,7 +18,12 @@ public class Loan
 
     public Loan()
     {
-
+        this.user = new SimpleObjectProperty<>();
+        this.book = new SimpleObjectProperty<>();
+        this.checkOut = new SimpleObjectProperty<>();
+        this.checkIn = new SimpleObjectProperty<>();
+        this.checkOut = new SimpleObjectProperty<>();
+        this.dueDate = new SimpleObjectProperty<>();
     }
 
     public Loan(User user, Book book, LocalDate checkOut)
@@ -108,6 +117,26 @@ public class Loan
     public SimpleObjectProperty<LocalDate> dueDateProperty()
     {
         return dueDate;
+    }
+
+    @Override
+    protected List<String> customOutputData() {
+        List<String> data = new ArrayList<>();
+        //data.add(getUser().getName());
+        //data.add(getBook().getTitle());
+        data.add(getCheckIn().toString());
+        data.add(getCheckOut().toString());
+        data.add(getDueDate().toString());
+        return data;
+    }
+
+    @Override
+    public void customInputData(Iterator<String> itr) {
+        //setUser(itr.next());
+        //setBook(itr.next());
+        setCheckIn(LocalDate.parse(itr.next()));
+        setCheckOut(LocalDate.parse(itr.next()));
+        setDueDate(LocalDate.parse(itr.next()));
     }
 
 }
