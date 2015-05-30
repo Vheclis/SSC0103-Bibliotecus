@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -49,13 +50,24 @@ public class MyBooksTab implements Initializable
         Library.getInstance().currentUserProperty().addListener((observable, oldValue, newValue) -> updateMyBooks());
         Library.getInstance().currentDateProperty().addListener((observable, oldValue, newValue) -> updateMyBooks());
         Library.getInstance().getLoans().addListener((ListChangeListener.Change<? extends Loan> c) -> updateMyBooks());
+
     }
 
     private void updateMyBooks()
     {
         List<Loan> loans = Library.getInstance().getLoans()
-                .filtered(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()));
-
+                .filtered(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()))
+                .filtered(loan -> loan.getCheckIn() == null);
         myLoans.setAll(loans);
+
+    }
+
+    public void onCheckIn(ActionEvent actionEvent) {
+
+        Loan selectedLoan = myBooksTable.getSelectionModel().getSelectedItem();
+        selectedLoan.setCheckIn(Library.getInstance().getCurrentDate());
+        myLoans.remove(selectedLoan);
+        myLoans.add(selectedLoan);
+        //updateMyBooks();
     }
 }

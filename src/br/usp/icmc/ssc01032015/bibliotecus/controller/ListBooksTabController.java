@@ -75,6 +75,9 @@ public class ListBooksTabController implements Initializable
 
         //start logged out
         updateBorrowButton();
+
+        //
+        //Library.getInstance().getLoans().addListener((ListChangeListener.Change<? extends Loan> c) -> updateTable());
     }
 
     private void updateTable()
@@ -129,6 +132,15 @@ public class ListBooksTabController implements Initializable
             return;
         }
 
+        //test if the user type is allowed to borrow that book
+        if((selectedBook.getType() == Book.Type.Textbook) && (currentUser.getType() == User.Type.Community))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Borrow not allowed");
+            alert.setContentText("Community users can't borrow textbooks");
+            alert.show();
+            return;
+        }
         //add loan
         Loan loan = new Loan(currentUser, selectedBook, library.getCurrentDate());
         library.getLoans().add(loan);
