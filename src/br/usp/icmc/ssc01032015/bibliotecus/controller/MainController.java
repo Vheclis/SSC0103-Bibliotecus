@@ -1,7 +1,9 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
+import br.usp.icmc.ssc01032015.bibliotecus.model.Book;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
 import br.usp.icmc.ssc01032015.bibliotecus.model.User;
+import br.usp.icmc.ssc01032015.bibliotecus.serialization.CSVSerializer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -112,9 +114,12 @@ public class MainController implements Initializable
 
     }
 
-    public void booksExport(ActionEvent actionEvent)
+    public void booksExport(ActionEvent actionEvent) throws IllegalAccessException, IOException, InstantiationException
     {
-
+        Book book = new Book("titulo", "autor", Book.Type.General, 3);
+        CSVSerializer.write(book, System.out);
+        Book b2 = CSVSerializer.read(System.in, Book.class);
+        CSVSerializer.write(b2, System.out);
     }
 
     public void usersExport(ActionEvent actionEvent)

@@ -11,12 +11,17 @@ public class User
     private SimpleObjectProperty<Type> type;
     private SimpleObjectProperty<LocalDate> registration;
 
+    public User()
+    {
+
+    }
+
     public User(String name, Type type)
     {
         this.name = new SimpleStringProperty();
         setName(name);
 
-        this.type = new SimpleObjectProperty<Type>();
+        this.type = new SimpleObjectProperty<>();
         setType(type);
 
         this.registration = new SimpleObjectProperty<>();

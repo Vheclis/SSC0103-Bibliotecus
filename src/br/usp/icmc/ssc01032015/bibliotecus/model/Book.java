@@ -1,13 +1,16 @@
 package br.usp.icmc.ssc01032015.bibliotecus.model;
 
+import br.usp.icmc.ssc01032015.bibliotecus.serialization.CSVSerializable;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-public class Book
+public class Book extends CSVSerializable
 {
     /**
      * Title of the book
@@ -36,24 +39,25 @@ public class Book
 
     private SimpleObjectProperty<LocalDate> registration;
 
-    public Book(String title, String author, Type type, int totalQuantity)
+    public Book()
     {
         this.title = new SimpleStringProperty();
-        setTitle(title);
-
         this.author = new SimpleStringProperty();
-        setAuthor(author);
-
-        this.type = new SimpleObjectProperty<Type>();
-        setType(type);
-
+        this.type = new SimpleObjectProperty<>();
         this.totalQuantity = new SimpleIntegerProperty();
-        setTotalQuantity(totalQuantity);
-
         this.currentQuantity = new SimpleIntegerProperty();
-        setCurrentQuantity(totalQuantity);
-
         this.registration = new SimpleObjectProperty<>();
+    }
+
+    public Book(String title, String author, Type type, int totalQuantity)
+    {
+        this();
+
+        setTitle(title);
+        setAuthor(author);
+        setType(type);
+        setTotalQuantity(totalQuantity);
+        setCurrentQuantity(totalQuantity);
         setRegistration(Library.getInstance().getCurrentDate());
     }
 
@@ -151,6 +155,31 @@ public class Book
     public void setRegistration(LocalDate registration)
     {
         this.registration.set(registration);
+    }
+
+    @Override
+    protected List<String> customOutputData()
+    {
+        List<String> data = new ArrayList<>();
+        data.add(getTitle());
+        data.add(getAuthor());
+        data.add(getType().name);
+        data.add(Integer.toString(getCurrentQuantity()));
+        data.add(Integer.toString(getTotalQuantity()));
+        data.add(getRegistration().toString());
+
+        return data;
+    }
+
+    @Override
+    public void customInputData(Iterator<String> itr)
+    {
+        setTitle(itr.next());
+        setAuthor(itr.next());
+        setType(Type.valueOf(itr.next()));
+        setCurrentQuantity(Integer.parseInt(itr.next()));
+        setTotalQuantity(Integer.parseInt(itr.next()));
+        setRegistration(LocalDate.parse(itr.next()));
     }
 
     public enum Type

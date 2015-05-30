@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class MyBooksTab implements Initializable
+public class MyBooksTabController implements Initializable
 {
     @FXML
     private TableView<Loan> myBooksTable;
@@ -39,8 +39,8 @@ public class MyBooksTab implements Initializable
     {
         //table column bindings
         bookCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBook().getTitle()));
-        checkOutCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("checkOut"));
-        dueDateCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("dueDate"));
+        checkOutCol.setCellValueFactory(new PropertyValueFactory<>("checkOut"));
+        dueDateCol.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
 
         //table bindings
         myLoans = FXCollections.observableArrayList();

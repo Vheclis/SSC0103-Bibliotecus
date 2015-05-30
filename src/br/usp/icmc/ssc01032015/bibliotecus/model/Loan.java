@@ -12,21 +12,26 @@ public class Loan
     private SimpleObjectProperty<LocalDate> checkIn;
     private SimpleObjectProperty<LocalDate> dueDate;
 
+    public Loan()
+    {
+
+    }
+
     public Loan(User user, Book book, LocalDate checkOut)
     {
-        this.user = new SimpleObjectProperty<User>();
+        this.user = new SimpleObjectProperty<>();
         setUser(user);
 
-        this.book = new SimpleObjectProperty<Book>();
+        this.book = new SimpleObjectProperty<>();
         setBook(book);
 
-        this.checkOut = new SimpleObjectProperty<LocalDate>();
+        this.checkOut = new SimpleObjectProperty<>();
         setCheckOut(checkOut);
 
-        this.checkIn = new SimpleObjectProperty<LocalDate>();
+        this.checkIn = new SimpleObjectProperty<>();
         setCheckIn(null);
 
-        this.dueDate = new SimpleObjectProperty<LocalDate>();
+        this.dueDate = new SimpleObjectProperty<>();
         setDueDate(Library.getInstance().calculateDueDateFor(Library.getInstance().getCurrentDate(), user.getType()));
     }
 
