@@ -59,6 +59,7 @@ public class Library
                 loan.getBook().setCurrentQuantity(loan.getBook().getCurrentQuantity()-1);
             }
         }
+        onCurrentDateChange(null, null, null); //hhehehehehe shhhhh
 
         Optional<Loan> maxLoan= loans.stream().max(Comparator.comparingLong(loan -> loan.getCheckOut().toEpochDay()));
         if(maxLoan.isPresent())
