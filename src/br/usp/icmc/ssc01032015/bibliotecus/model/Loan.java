@@ -112,8 +112,7 @@ public class Loan extends CSVSerializable
     {
         return dueDate;
     }
-    
-    //csv format writing
+
     @Override
     protected List<String> customOutputData() {
         List<String> data = new ArrayList<>();
@@ -127,26 +126,21 @@ public class Loan extends CSVSerializable
         data.add(getDueDate().toString());
         return data;
     }
-    
-    
-    //csv format reading
+
     @Override
-    public void customInputData(Iterator<String> itr) throws Exception
-    {
-        String userName = itr.next();
-        Optional<User>opUser =  Library.getInstance().getUsers().stream().filter(user -> user.getName().equals(userName)).findFirst();
+    public void customInputData(Iterator<String> itr) throws Exception{
+        Optional<User>opUser =  Library.getInstance().getUsers().stream().filter(user -> user.getName().equals(itr.next())).findFirst();
         if(opUser.isPresent()) setUser(opUser.get());
         else
         {
-            throw new Exception("invalid username: " + userName + '\n');
+            throw new Exception("invalid user: " + itr);
         }
         
-        String bookTitle = itr.next();
-        Optional<Book>opBook =  Library.getInstance().getBooks().stream().filter(book -> book.getTitle().equals(bookTitle)).findFirst();
+        Optional<Book>opBook =  Library.getInstance().getBooks().stream().filter(book -> book.getTitle().equals(itr.next())).findFirst();
         if(opBook.isPresent()) setBook(opBook.get());
         else
         {
-            throw new Exception("invalid book title: " + bookTitle + '\n');
+            throw new Exception("invalid book: " + itr);
         }
         
         if(itr.next().isEmpty()) setCheckIn(null);

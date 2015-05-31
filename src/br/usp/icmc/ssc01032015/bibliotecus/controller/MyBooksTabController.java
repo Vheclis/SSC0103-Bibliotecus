@@ -1,22 +1,22 @@
 package br.usp.icmc.ssc01032015.bibliotecus.controller;
 
-import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
-import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+        import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
+        import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
+        import javafx.beans.property.SimpleStringProperty;
+        import javafx.collections.FXCollections;
+        import javafx.collections.ListChangeListener;
+        import javafx.collections.ObservableList;
+        import javafx.event.ActionEvent;
+        import javafx.fxml.FXML;
+        import javafx.fxml.Initializable;
+        import javafx.scene.control.TableColumn;
+        import javafx.scene.control.TableView;
+        import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.ResourceBundle;
+        import java.net.URL;
+        import java.time.LocalDate;
+        import java.util.List;
+        import java.util.ResourceBundle;
 
 public class MyBooksTabController implements Initializable
 {
@@ -68,8 +68,8 @@ public class MyBooksTabController implements Initializable
 
         Loan selectedLoan = myBooksTable.getSelectionModel().getSelectedItem();
         selectedLoan.setCheckIn(Library.getInstance().getCurrentDate());
-        Library.getInstance().getLoans().add(selectedLoan);
         Library.getInstance().getLoans().remove(selectedLoan);
+        Library.getInstance().getLoans().add(selectedLoan);
         //updateMyBooks();
     }
 }

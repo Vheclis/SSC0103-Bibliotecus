@@ -111,8 +111,7 @@ public class MainController implements Initializable
     public void booksImport(ActionEvent actionEvent) throws FileNotFoundException, InstantiationException, IOException, Exception
     {
         Book book;
-        int addedAmount = 0;
-        int invalidAmount = 0;
+        int amount = 0;
         
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Import Books File");
@@ -125,17 +124,10 @@ public class MainController implements Initializable
             FileInputStream fileIO = new FileInputStream(file);
             while((book = CSVSerializer.read(fileIO, Book.class)) != null)
             {
-                if(Library.getInstance().getBooks().contains(book))
-                {
-                    invalidAmount++;
-                }
-                else
-                {
-                    Library.getInstance().getBooks().add(book);
-                    addedAmount++;
-                }
+                Library.getInstance().getBooks().add(book);
+                amount++;
             }
-            new Alert(AlertType.INFORMATION, "Book(s) added: " +  addedAmount + "\nInvalid book(s): " + invalidAmount).show();
+            new Alert(AlertType.INFORMATION, amount + " Book(s) added!").show();
         }
         else
         {
@@ -146,8 +138,7 @@ public class MainController implements Initializable
     public void usersImport(ActionEvent actionEvent) throws FileNotFoundException, InstantiationException, IOException, Exception
     {
         User user;
-        int addedAmount = 0;
-        int invalidAmount = 0;
+        int amount = 0;
         
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Import Users File");
@@ -160,17 +151,10 @@ public class MainController implements Initializable
             FileInputStream fileIO = new FileInputStream(file);
             while((user = CSVSerializer.read(fileIO, User.class)) != null)
             {
-                if(Library.getInstance().getUsers().contains(user))
-                {
-                    invalidAmount++;
-                }
-                else
-                {
-                    Library.getInstance().getUsers().add(user);
-                    addedAmount++;
-                }
+                Library.getInstance().getUsers().add(user);
+                amount++;
             }
-            new Alert(AlertType.INFORMATION, "User(s) added: " +  addedAmount + "\nInvalid user(s): " + invalidAmount).show();
+            new Alert(AlertType.INFORMATION, amount + " User(s) added!").show();
         }
         else
         {
@@ -204,10 +188,10 @@ public class MainController implements Initializable
                     Library.getInstance().getLoans().add(loan);
                     addedAmount++;
                 } catch (Exception ex) {
-                    errorMessage = errorMessage.concat("\tLine: " + lineCount + " -> " +  ex.getMessage() + '\n');
+                    errorMessage = errorMessage.concat("Line:" + lineCount + ex.getMessage() + '\n');
                 }
             }
-            new Alert(AlertType.INFORMATION, "Loans added: " + addedAmount + "\nErrors:\n" + errorMessage).show();
+            new Alert(AlertType.INFORMATION, "Loans added: " + addedAmount + '\n' + errorMessage).show();
         }
         else
         {
