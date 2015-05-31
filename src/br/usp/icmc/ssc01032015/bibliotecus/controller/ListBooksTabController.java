@@ -118,6 +118,37 @@ public class ListBooksTabController implements Initializable
             return;
         }
 
+        //test how much books user has
+        List<Loan> loans = Library.getInstance().getLoans()
+                .filtered(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()))
+                .filtered(loan -> loan.getCheckIn() == null);
+        if((currentUser.getType() == User.Type.Student) && (loans.size() >= 4))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Limits of borrow achieved");
+            alert.setContentText("Students can only borrow 4 books at the same time");
+            alert.show();
+            return;
+        }
+
+        if((currentUser.getType() == User.Type.Professor) && (loans.size() >= 6))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Limits of borrow achieved");
+            alert.setContentText("Professors can only borrow 6 books at the same time");
+            alert.show();
+            return;
+        }
+
+        if((currentUser.getType() == User.Type.Community) && (loans.size() >= 2))
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Limits of borrow achieved");
+            alert.setContentText("Community users can only borrow 2 books at the same time");
+            alert.show();
+            return;
+        }
+
         //test for selected book
         Book selectedBook = booksTable.getSelectionModel().getSelectedItem();
         if(selectedBook == null || selectedBook.getCurrentQuantity() == 0)
