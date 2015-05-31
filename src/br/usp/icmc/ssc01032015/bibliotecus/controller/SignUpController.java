@@ -37,9 +37,7 @@ public class SignUpController implements Initializable
     }
 
     /**
-     * Called when "Sign up" button was pressed
-     *
-     * @param actionEvent
+     * Called when "Sign up" button is pressed
      */
     public void onSignUp(ActionEvent actionEvent)
     {

@@ -24,13 +24,9 @@ public class User extends CSVSerializable
 
     public User(String name, Type type)
     {
-        this.name = new SimpleStringProperty();
+        this();
         setName(name);
-
-        this.type = new SimpleObjectProperty<>();
         setType(type);
-
-        this.registration = new SimpleObjectProperty<>();
         setRegistration(Library.getInstance().getCurrentDate());
     }
 

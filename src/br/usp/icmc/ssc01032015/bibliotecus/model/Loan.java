@@ -30,7 +30,7 @@ public class Loan extends CSVSerializable
     public Loan(User user, Book book, LocalDate checkOut)
     {
         this();
-        
+
         setUser(user);
         setBook(book);
         setCheckOut(checkOut);
@@ -114,38 +114,40 @@ public class Loan extends CSVSerializable
     }
 
     @Override
-    protected List<String> customOutputData() {
+    protected List<String> customOutputData()
+    {
         List<String> data = new ArrayList<>();
         data.add(getUser().getName());
         data.add(getBook().getTitle());
-        
-        if(getCheckIn() == null) data.add("");
+
+        if (getCheckIn() == null) data.add("");
         else data.add(getCheckIn().toString());
-        
+
         data.add(getCheckOut().toString());
         data.add(getDueDate().toString());
         return data;
     }
 
     @Override
-    public void customInputData(Iterator<String> itr) throws Exception{
-        Optional<User>opUser =  Library.getInstance().getUsers().stream().filter(user -> user.getName().equals(itr.next())).findFirst();
-        if(opUser.isPresent()) setUser(opUser.get());
+    public void customInputData(Iterator<String> itr) throws IllegalArgumentException
+    {
+        Optional<User> opUser = Library.getInstance().getUsers().stream().filter(user -> user.getName().equals(itr.next())).findFirst();
+        if (opUser.isPresent()) setUser(opUser.get());
         else
         {
-            throw new Exception("invalid user: " + itr);
+            throw new IllegalArgumentException("Couldn't find user of id: " + itr);
         }
-        
-        Optional<Book>opBook =  Library.getInstance().getBooks().stream().filter(book -> book.getTitle().equals(itr.next())).findFirst();
-        if(opBook.isPresent()) setBook(opBook.get());
+
+        Optional<Book> opBook = Library.getInstance().getBooks().stream().filter(book -> book.getTitle().equals(itr.next())).findFirst();
+        if (opBook.isPresent()) setBook(opBook.get());
         else
         {
-            throw new Exception("invalid book: " + itr);
+            throw new IllegalArgumentException("Couldn't find book of id: " + itr);
         }
-        
-        if(itr.next().isEmpty()) setCheckIn(null);
+
+        if (itr.next().isEmpty()) setCheckIn(null);
         else setCheckIn(LocalDate.parse(itr.toString()));
-        
+
         setCheckOut(LocalDate.parse(itr.next()));
         setDueDate(LocalDate.parse(itr.next()));
     }

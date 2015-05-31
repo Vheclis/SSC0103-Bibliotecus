@@ -50,10 +50,10 @@ public class ListBooksTabController implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
         //table column bindings
-        titleCol.setCellValueFactory(new PropertyValueFactory<Book, String>("title"));
-        authorCol.setCellValueFactory(new PropertyValueFactory<Book, String>("author"));
-        totalCol.setCellValueFactory(new PropertyValueFactory<Book, Integer>("totalQuantity"));
-        availableCol.setCellValueFactory(new PropertyValueFactory<Book, Integer>("currentQuantity"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        authorCol.setCellValueFactory(new PropertyValueFactory<>("author"));
+        totalCol.setCellValueFactory(new PropertyValueFactory<>("totalQuantity"));
+        availableCol.setCellValueFactory(new PropertyValueFactory<>("currentQuantity"));
         typeCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getType().name));
 
         //table binding
@@ -75,9 +75,6 @@ public class ListBooksTabController implements Initializable
 
         //start logged out
         updateBorrowButton();
-
-        //
-        //Library.getInstance().getLoans().addListener((ListChangeListener.Change<? extends Loan> c) -> updateTable());
     }
 
     private void updateTable()

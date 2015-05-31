@@ -24,14 +24,14 @@ public abstract class CSVSerializable
 
     protected abstract List<String> customOutputData();
 
-    public void inputData(List<String> data) throws Exception
+    public void inputData(List<String> data) throws IllegalArgumentException
     {
         Iterator<String> itr = data.iterator();
         id = Integer.parseInt(itr.next());
         customInputData(itr);
     }
 
-    public abstract void customInputData(Iterator<String> itr) throws Exception;
+    public abstract void customInputData(Iterator<String> itr) throws IllegalArgumentException;
 
     public int getId()
     {

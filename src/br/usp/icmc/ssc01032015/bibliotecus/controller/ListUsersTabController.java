@@ -32,8 +32,8 @@ public class ListUsersTabController implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
         //table column bindings
-        nameCol.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<User, String>("typeName"));
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("typeName"));
 
         //table bindings
         usersView = FXCollections.observableArrayList();

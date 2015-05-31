@@ -4,29 +4,28 @@ import br.usp.icmc.ssc01032015.bibliotecus.model.Book;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Library;
 import br.usp.icmc.ssc01032015.bibliotecus.model.Loan;
 import br.usp.icmc.ssc01032015.bibliotecus.model.User;
+import br.usp.icmc.ssc01032015.bibliotecus.serialization.CSVSerializable;
 import br.usp.icmc.ssc01032015.bibliotecus.serialization.CSVSerializer;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
-import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
+
+import java.io.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 
 public class MainController implements Initializable
@@ -108,167 +107,129 @@ public class MainController implements Initializable
         stage.show();
     }
 
-    public void booksImport(ActionEvent actionEvent) throws FileNotFoundException, InstantiationException, IOException, Exception
+    public void booksImport(ActionEvent actionEvent) throws InstantiationException, IOException
     {
-        Book book;
-        int amount = 0;
-        
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Import Books File");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files (*csv)", "*.csv"));
-        File file = fileChooser.showOpenDialog(currentUserLabel.getScene().getWindow());
-        
-        if(file != null && file.exists())
+        File file = openFileDialog("books");
+        if (file == null) return;
+
+        if (file.exists())
         {
-            FileInputStream fileIO = new FileInputStream(file);
-            while((book = CSVSerializer.read(fileIO, Book.class)) != null)
-            {
-                Library.getInstance().getBooks().add(book);
-                amount++;
-            }
-            new Alert(AlertType.INFORMATION, amount + " Book(s) added!").show();
-        }
-        else
+            List<Book> books = parseCSV(file, Book.class);
+            Library.getInstance().getBooks().addAll(books);
+
+            new Alert(AlertType.INFORMATION, books.size() + " book(s) added!").show();
+        } else
         {
-            new Alert(AlertType.ERROR, "Error opening file!").show();
+            new Alert(AlertType.ERROR, "Error opening file").show();
         }
     }
 
-    public void usersImport(ActionEvent actionEvent) throws FileNotFoundException, InstantiationException, IOException, Exception
+    public void usersImport(ActionEvent actionEvent) throws InstantiationException, IOException, IllegalAccessException
     {
-        User user;
-        int amount = 0;
-        
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Import Users File");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files (*csv)", "*.csv"));
-        File file = fileChooser.showOpenDialog(currentUserLabel.getScene().getWindow());
-        
-        if(file != null && file.exists())
+        File file = openFileDialog("users");
+        if (file == null) return;
+
+        if (file.exists())
         {
-            FileInputStream fileIO = new FileInputStream(file);
-            while((user = CSVSerializer.read(fileIO, User.class)) != null)
-            {
-                Library.getInstance().getUsers().add(user);
-                amount++;
-            }
-            new Alert(AlertType.INFORMATION, amount + " User(s) added!").show();
-        }
-        else
+            List<User> users = parseCSV(file, User.class);
+            Library.getInstance().getUsers().addAll(users);
+
+            new Alert(AlertType.INFORMATION, users.size() + " user(s) added!").show();
+        } else
         {
-            new Alert(AlertType.ERROR, "Error opening file!").show();
+            new Alert(AlertType.ERROR, "Error opening file").show();
         }
-        
     }
 
-    public void loansImport(ActionEvent actionEvent) throws FileNotFoundException, InstantiationException, IOException
+    public void loansImport(ActionEvent actionEvent) throws InstantiationException, IOException
     {
-        Loan loan = null;
-        int lineCount = 0;
-        int addedAmount = 0;
-        String errorMessage = "";
-        
+        File file = openFileDialog("loans");
+        if (file == null) return;
+
+        if (file.exists())
+        {
+            List<Loan> loans = parseCSV(file, Loan.class);
+            Library.getInstance().getLoans().addAll(loans);
+
+            new Alert(AlertType.INFORMATION, loans.size() + " loan(s) added!").show();
+        } else
+        {
+            new Alert(AlertType.ERROR, "Error opening file").show();
+        }
+    }
+
+    private File openFileDialog(String subject)
+    {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Import Loans File");
+        fileChooser.setTitle("Import " + subject);
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files (*csv)", "*.csv"));
-        File file = fileChooser.showOpenDialog(currentUserLabel.getScene().getWindow());
-        
-        if(file != null && file.exists())
+        return fileChooser.showOpenDialog(currentUserLabel.getScene().getWindow());
+    }
+
+    private <T extends CSVSerializable> List<T> parseCSV(File file, Class<T> c) throws IOException
+    {
+        List<T> items = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))))
         {
-            FileInputStream fileIO = new FileInputStream(file);
-            while(true)
+            reader.lines().forEach(line ->
             {
-                
-                try {
-                    loan = CSVSerializer.read(fileIO, Loan.class);
-                    if(loan == null) break;
-                    Library.getInstance().getLoans().add(loan);
-                    addedAmount++;
-                } catch (Exception ex) {
-                    errorMessage = errorMessage.concat("Line:" + lineCount + ex.getMessage() + '\n');
+                try
+                {
+                    items.add(CSVSerializer.read(line, c));
+                } catch (IllegalAccessException | InstantiationException e)
+                {
+                    e.printStackTrace();
                 }
-            }
-            new Alert(AlertType.INFORMATION, "Loans added: " + addedAmount + '\n' + errorMessage).show();
+            });
         }
-        else
-        {
-            new Alert(AlertType.ERROR, "Error opening file!").show();
-        }
+        return items;
     }
 
-    public void booksExport(ActionEvent actionEvent) throws IllegalAccessException, IOException, InstantiationException
+    public void booksExport(ActionEvent actionEvent) throws FileNotFoundException
     {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Export Books Path");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files (*csv)", "*.csv"));
-        File file = fileChooser.showSaveDialog(currentUserLabel.getScene().getWindow());
-        
-        if(file != null && !file.exists())
-        {
-            FileOutputStream fileOS = new FileOutputStream(file);
-            for(Book book : Library.getInstance().getBooks())
-                CSVSerializer.write(book, fileOS);
-        }
-        else
-        {
-            new Alert(AlertType.ERROR, "Error creating file!").show();
-        }
+        File file = openSaveDialog("books");
+        if (file == null) return;
+        FileOutputStream fileOS = new FileOutputStream(file);
+        for (Book book : Library.getInstance().getBooks())
+            CSVSerializer.write(book, fileOS);
     }
 
-    public void usersExport(ActionEvent actionEvent) throws IllegalAccessException, IOException, InstantiationException 
+
+    public void usersExport(ActionEvent actionEvent) throws FileNotFoundException
     {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Export Users Path");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files (*csv)", "*.csv"));
-        File file = fileChooser.showSaveDialog(currentUserLabel.getScene().getWindow());
-        
-        if(file != null && !file.exists())
-        {
-            FileOutputStream fileOS = new FileOutputStream(file);
-            
-            for(User user : Library.getInstance().getUsers())
-                CSVSerializer.write(user, fileOS);
-        }
-        else
-        {
-            new Alert(AlertType.ERROR, "Error creating file!").show();
-        }
+        File file = openSaveDialog("users");
+        if (file == null) return;
+        FileOutputStream fileOS = new FileOutputStream(file);
+        for (User user: Library.getInstance().getUsers())
+            CSVSerializer.write(user, fileOS);
     }
 
-    public void loansExport(ActionEvent actionEvent) throws IllegalAccessException, IOException, InstantiationException
+    public void loansExport(ActionEvent actionEvent) throws FileNotFoundException
+    {
+        File file = openSaveDialog("loans");
+        if (file == null) return;
+        FileOutputStream fileOS = new FileOutputStream(file);
+        for (Loan loan : Library.getInstance().getLoans())
+            CSVSerializer.write(loan, fileOS);
+    }
+
+    private File openSaveDialog(String subject)
     {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Export Loans Export");
+        fileChooser.setTitle("Export " + subject);
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files (*csv)", "*.csv"));
-        File file = fileChooser.showSaveDialog(currentUserLabel.getScene().getWindow());
-        
-        if(file != null && !file.exists())
-        {
-            FileOutputStream fileOS = new FileOutputStream(file);
-            
-            for(Loan loan : Library.getInstance().getLoans())
-                CSVSerializer.write(loan, fileOS);
-        }
-        else
-        {
-            new Alert(AlertType.ERROR, "Error creating file!").show();
-        }
+        return fileChooser.showSaveDialog(currentUserLabel.getScene().getWindow());
     }
 
     private void onCurrentUserChanged(User newUser)
     {
-        if(newUser != null)
+        if (newUser != null)
         {
             currentUserLabel.setText(newUser.getName());
             myBooksTab.setDisable(false);
-        }
-        else
+        } else
         {
             currentUserLabel.setText("None");
         }

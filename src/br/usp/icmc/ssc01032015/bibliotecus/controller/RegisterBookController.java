@@ -31,7 +31,7 @@ public class RegisterBookController implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
         typeBox.getSelectionModel().selectFirst();
-        quantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE));
+        quantitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE));
     }
 
     public void onRegister(ActionEvent actionEvent)

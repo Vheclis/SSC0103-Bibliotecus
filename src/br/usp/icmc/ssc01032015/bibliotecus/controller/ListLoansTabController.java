@@ -43,9 +43,9 @@ public class ListLoansTabController implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
         //table column bindings
-        checkOutCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("checkOut"));
-        checkInCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("checkIn"));
-        dueDateCol.setCellValueFactory(new PropertyValueFactory<Loan, LocalDate>("dueDate"));
+        checkOutCol.setCellValueFactory(new PropertyValueFactory<>("checkOut"));
+        checkInCol.setCellValueFactory(new PropertyValueFactory<>("checkIn"));
+        dueDateCol.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
         bookCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getBook().getTitle()));
         userCol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getUser().getName()));
 
