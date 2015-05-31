@@ -13,7 +13,7 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws IOException
     {
-        Parent root = FXMLLoader.load(getClass().getResource("view/Main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/br/usp/icmc/ssc01032015/bibliotecus/view/Main.fxml"));
         Stage stage = new Stage();
         stage.setTitle("Bibliotecus");
         stage.setScene(new Scene(root));

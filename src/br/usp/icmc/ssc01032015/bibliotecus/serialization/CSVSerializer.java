@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 public class CSVSerializer
 {
@@ -31,11 +32,20 @@ public class CSVSerializer
         writer.flush();
     }
 
-    public static <T extends CSVSerializable> T read(InputStream stream, Class<T> c) throws IllegalAccessException, InstantiationException, IOException
+    public static <T extends CSVSerializable> T read(InputStream stream, Class<T> c) throws IllegalAccessException, InstantiationException, IOException, Exception
     {
         //read line and split by commas
+        /*
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        
         String line = reader.readLine();
+        if(line == null) return null;
+        */
+        Scanner scan = new Scanner(stream);
+        if(!scan.hasNextLine()) return null;
+        
+        String line = scan.nextLine();
+        
         String[] data = line.split(",\\s");
 
         //return instance of object

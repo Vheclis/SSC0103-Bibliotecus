@@ -24,14 +24,14 @@ public abstract class CSVSerializable
 
     protected abstract List<String> customOutputData();
 
-    public void inputData(List<String> data)
+    public void inputData(List<String> data) throws Exception
     {
         Iterator<String> itr = data.iterator();
         id = Integer.parseInt(itr.next());
         customInputData(itr);
     }
 
-    public abstract void customInputData(Iterator<String> itr);
+    public abstract void customInputData(Iterator<String> itr) throws Exception;
 
     public int getId()
     {
