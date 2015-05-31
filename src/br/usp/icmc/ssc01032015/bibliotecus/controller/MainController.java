@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 
 public class MainController implements Initializable
@@ -78,6 +79,26 @@ public class MainController implements Initializable
         //enable-disable my books tab
         Library.getInstance().currentUserProperty().addListener(
                 (observable, oldValue, newValue) -> onCurrentUserChanged(newValue));
+
+        initialImport("books.csv", Book.class, books -> Library.getInstance().getBooks().addAll(books) );
+        initialImport("users.csv", User.class, users -> Library.getInstance().getUsers().addAll(users) );
+        initialImport("loans.csv", Loan.class, loans -> Library.getInstance().getLoans().addAll(loans) );
+    }
+
+    private <T extends CSVSerializable> void initialImport(String filename, Class<T> c, Consumer<List<T>> consumer)
+    {
+        File file = new File(System.getProperty("user.dir"), filename);
+        if (file.exists())
+        {
+            try
+            {
+                List<T> list = importItems(file, c);
+                consumer.accept(list);
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void userSignUp(ActionEvent actionEvent) throws IOException
@@ -114,7 +135,7 @@ public class MainController implements Initializable
 
         if (file.exists())
         {
-            List<Book> books = parseCSV(file, Book.class);
+            List<Book> books = importItems(file, Book.class);
             Library.getInstance().getBooks().addAll(books);
 
             new Alert(AlertType.INFORMATION, books.size() + " book(s) added!").show();
@@ -131,7 +152,7 @@ public class MainController implements Initializable
 
         if (file.exists())
         {
-            List<User> users = parseCSV(file, User.class);
+            List<User> users = importItems(file, User.class);
             Library.getInstance().getUsers().addAll(users);
 
             new Alert(AlertType.INFORMATION, users.size() + " user(s) added!").show();
@@ -148,7 +169,7 @@ public class MainController implements Initializable
 
         if (file.exists())
         {
-            List<Loan> loans = parseCSV(file, Loan.class);
+            List<Loan> loans = importItems(file, Loan.class);
             Library.getInstance().getLoans().addAll(loans);
 
             new Alert(AlertType.INFORMATION, loans.size() + " loan(s) added!").show();
@@ -167,7 +188,7 @@ public class MainController implements Initializable
         return fileChooser.showOpenDialog(currentUserLabel.getScene().getWindow());
     }
 
-    private <T extends CSVSerializable> List<T> parseCSV(File file, Class<T> c) throws IOException
+    private <T extends CSVSerializable> List<T> importItems(File file, Class<T> c) throws IOException
     {
         List<T> items = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))))
@@ -234,7 +255,6 @@ public class MainController implements Initializable
             currentUserLabel.setText("None");
         }
     }
-
 
     public void onDateChange(ActionEvent actionEvent)
     {

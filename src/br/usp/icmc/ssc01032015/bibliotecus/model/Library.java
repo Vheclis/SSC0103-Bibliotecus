@@ -52,14 +52,6 @@ public class Library
 
     private void onLoansChanged(ListChangeListener.Change<? extends Loan> change)
     {
-        while (change.next())
-        {
-            for (Loan loan : change.getAddedSubList())
-            {
-                loan.getBook().setCurrentQuantity(loan.getBook().getCurrentQuantity()-1);
-            }
-        }
-
         Optional<Loan> maxLoan= loans.stream().max(Comparator.comparingLong(loan -> loan.getCheckOut().toEpochDay()));
         if(maxLoan.isPresent())
         {

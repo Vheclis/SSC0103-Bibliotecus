@@ -122,29 +122,14 @@ public class ListBooksTabController implements Initializable
         List<Loan> loans = Library.getInstance().getLoans()
                 .filtered(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()))
                 .filtered(loan -> loan.getCheckIn() == null);
-        if((currentUser.getType() == User.Type.Student) && (loans.size() >= 4))
-        {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Limits of borrow achieved");
-            alert.setContentText("Students can only borrow 4 books at the same time");
-            alert.show();
-            return;
-        }
 
-        if((currentUser.getType() == User.Type.Professor) && (loans.size() >= 6))
+        int maxLoans = Library.getInstance().getMaxLoanFor(currentUser.getType());
+        if(loans.size() >= maxLoans)
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Limits of borrow achieved");
-            alert.setContentText("Professors can only borrow 6 books at the same time");
-            alert.show();
-            return;
-        }
-
-        if((currentUser.getType() == User.Type.Community) && (loans.size() >= 2))
-        {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Limits of borrow achieved");
-            alert.setContentText("Community users can only borrow 2 books at the same time");
+            alert.setContentText(currentUser.getTypeName() + " account can only borrow "
+                    + maxLoans + " books at the same time");
             alert.show();
             return;
         }
@@ -177,5 +162,6 @@ public class ListBooksTabController implements Initializable
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("You have borrowed \"" + loan.getBook().getTitle()+ "\"");
         alert.setContentText("Return it until " + loan.getDueDate());
+        alert.show();
     }
 }

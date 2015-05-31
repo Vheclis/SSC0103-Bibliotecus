@@ -117,8 +117,8 @@ public class Loan extends CSVSerializable
     protected List<String> customOutputData()
     {
         List<String> data = new ArrayList<>();
-        data.add(getUser().getName());
-        data.add(getBook().getTitle());
+        data.add(Integer.toString(getUser().getId()));
+        data.add(Integer.toString(getBook().getId()));
 
         if (getCheckIn() == null) data.add("");
         else data.add(getCheckIn().toString());
@@ -131,14 +131,21 @@ public class Loan extends CSVSerializable
     @Override
     public void customInputData(Iterator<String> itr) throws IllegalArgumentException
     {
-        Optional<User> opUser = Library.getInstance().getUsers().stream().filter(user -> user.getName().equals(itr.next())).findFirst();
+        int readUserId = Integer.parseInt(itr.next());
+        Optional<User> opUser = Library.getInstance().getUsers()
+                .stream()
+                .filter(user -> user.getId() == readUserId)
+                .findFirst();
         if (opUser.isPresent()) setUser(opUser.get());
         else
         {
             throw new IllegalArgumentException("Couldn't find user of id: " + itr);
         }
-
-        Optional<Book> opBook = Library.getInstance().getBooks().stream().filter(book -> book.getTitle().equals(itr.next())).findFirst();
+        int readBookId = Integer.parseInt(itr.next());
+        Optional<Book> opBook = Library.getInstance().getBooks()
+                .stream()
+                .filter(book -> book.getId() == readBookId)
+                .findFirst();
         if (opBook.isPresent()) setBook(opBook.get());
         else
         {

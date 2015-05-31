@@ -55,11 +55,14 @@ public class MyBooksTabController implements Initializable
 
     private void updateMyBooks()
     {
+        if(Library.getInstance().getCurrentUser() == null) return;
+
         List<Loan> loans = Library.getInstance().getLoans()
                 .filtered(loan -> loan.getUser().getName().equals(Library.getInstance().getCurrentUser().getName()))
                 .filtered(loan -> loan.getCheckOut().isBefore(Library.getInstance().getCurrentDate())
                         || loan.getCheckOut().isEqual(Library.getInstance().getCurrentDate()))
-                .filtered(loan -> loan.getCheckIn() == null);
+                .filtered(loan -> loan.getCheckIn() == null ||
+                        loan.getCheckIn().toEpochDay() > Library.getInstance().getCurrentDate().toEpochDay());
         myLoans.setAll(loans);
 
     }

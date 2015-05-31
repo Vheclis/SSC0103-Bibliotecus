@@ -164,7 +164,6 @@ public class Book extends CSVSerializable
         data.add(getTitle());
         data.add(getAuthor());
         data.add(getType().name);
-        data.add(Integer.toString(getCurrentQuantity()));
         data.add(Integer.toString(getTotalQuantity()));
         data.add(getRegistration().toString());
 
@@ -177,8 +176,9 @@ public class Book extends CSVSerializable
         setTitle(itr.next());
         setAuthor(itr.next());
         setType(Type.valueOf(itr.next()));
-        setCurrentQuantity(Integer.parseInt(itr.next()));
-        setTotalQuantity(Integer.parseInt(itr.next()));
+        int quantity = Integer.parseInt(itr.next());
+        setTotalQuantity(quantity);
+        setCurrentQuantity(quantity);
         setRegistration(LocalDate.parse(itr.next()));
     }
 
