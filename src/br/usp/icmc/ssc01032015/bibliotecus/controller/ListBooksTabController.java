@@ -75,6 +75,7 @@ public class ListBooksTabController implements Initializable
 
         //start logged out
         updateBorrowButton();
+        updateTable();
     }
 
     private void updateTable()

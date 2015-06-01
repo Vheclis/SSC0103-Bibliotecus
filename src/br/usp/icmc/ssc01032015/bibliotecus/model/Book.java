@@ -61,12 +61,6 @@ public class Book extends CSVSerializable
         setRegistration(Library.getInstance().getCurrentDate());
     }
 
-    public void addCopies(int quantity)
-    {
-        totalQuantity.set(totalQuantity.get() + quantity);
-        currentQuantity.set(currentQuantity.get() + quantity);
-    }
-
     public String getTitle()
     {
         return title.get();

@@ -152,8 +152,9 @@ public class Loan extends CSVSerializable
             throw new IllegalArgumentException("Couldn't find book of id: " + itr);
         }
 
-        if (itr.next().isEmpty()) setCheckIn(null);
-        else setCheckIn(LocalDate.parse(itr.toString()));
+        String checkinString = itr.next();
+        if (checkinString.isEmpty()) setCheckIn(null);
+        else setCheckIn(LocalDate.parse(checkinString));
 
         setCheckOut(LocalDate.parse(itr.next()));
         setDueDate(LocalDate.parse(itr.next()));

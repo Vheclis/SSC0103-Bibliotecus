@@ -52,11 +52,20 @@ public class Library
 
     private void onLoansChanged(ListChangeListener.Change<? extends Loan> change)
     {
+        while(change.next())
+        {
+            for (Loan loan : change.getAddedSubList())
+            {
+                loan.getBook().setCurrentQuantity(calculateCopiesInStock(loan.getBook()));
+            }
+        }
+
         Optional<Loan> maxLoan= loans.stream().max(Comparator.comparingLong(loan -> loan.getCheckOut().toEpochDay()));
         if(maxLoan.isPresent())
         {
             newestLoanDate.set(maxLoan.get().getCheckOut());
         }
+
     }
 
     public int calculateUserSuspension(User user)
@@ -87,7 +96,7 @@ public class Library
         long copiesLent = getLoans()
                 .stream()
                 .filter(loan -> loan.getCheckOut().toEpochDay() <= getCurrentDate().toEpochDay())
-                .filter(loan -> loan.getBook().getTitle().equals(book.getTitle()))
+                .filter(loan -> loan.getBook().getId() == book.getId())
                 .filter(loan -> loan.getCheckIn() == null)
                 .count();
 

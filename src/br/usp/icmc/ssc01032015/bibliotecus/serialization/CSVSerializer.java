@@ -1,7 +1,7 @@
 package br.usp.icmc.ssc01032015.bibliotecus.serialization;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +40,33 @@ public class CSVSerializer
         T object = c.newInstance();
         object.inputData(Arrays.asList(data));
         return object;
+    }
+
+    public static <T extends CSVSerializable> List<T> importItems(File file, Class<T> c) throws IOException
+    {
+        List<T> items = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))))
+        {
+            reader.lines().forEach(line ->
+            {
+                try
+                {
+                    items.add(CSVSerializer.read(line, c));
+                } catch (IllegalAccessException | InstantiationException e)
+                {
+                    e.printStackTrace();
+                }
+            });
+        }
+        return items;
+    }
+
+    public static <T extends CSVSerializable> void defaultExport(File file, List<T> list)
+            throws FileNotFoundException
+    {
+        FileOutputStream fileOS = new FileOutputStream(file);
+        for (T object : list)
+            CSVSerializer.write(object, fileOS);
     }
 
 }

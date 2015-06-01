@@ -57,6 +57,8 @@ public class ListLoansTabController implements Initializable
         Library.getInstance().getLoans().addListener((ListChangeListener.Change<? extends Loan> c) -> updateLoans());
         Library.getInstance().currentDateProperty().addListener((observable, oldValue, newValue) -> updateLoans());
         Library.getInstance().currentUserProperty().addListener((observable, oldValue, newValue) -> updateLoans());
+
+        updateLoans();
     }
 
     private void updateLoans()

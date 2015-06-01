@@ -42,6 +42,8 @@ public class ListUsersTabController implements Initializable
         //update table when date or users are onCurrentDateChange
         Library.getInstance().currentDateProperty().addListener((observable, oldValue, newValue) -> updateUsers());
         Library.getInstance().getUsers().addListener((ListChangeListener.Change<? extends User> c) -> updateUsers());
+
+        updateUsers();
     }
 
     private void updateUsers()

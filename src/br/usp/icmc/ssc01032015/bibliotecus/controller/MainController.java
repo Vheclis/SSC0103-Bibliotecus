@@ -12,11 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -25,6 +22,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
@@ -87,10 +85,6 @@ public class MainController implements Initializable
                 (observable, oldValue, newValue) -> onCurrentUserChanged(newValue));
         Library.getInstance().currentDateProperty().addListener(
                 (observable, oldValue, newValue) -> onCurrenDateChanged());
-
-        initialImport("books.csv", Book.class, books -> Library.getInstance().getBooks().addAll(books));
-        initialImport("users.csv", User.class, users -> Library.getInstance().getUsers().addAll(users) );
-        initialImport("loans.csv", Loan.class, loans -> Library.getInstance().getLoans().addAll(loans));
         onCurrenDateChanged();
     }
 
@@ -119,22 +113,6 @@ public class MainController implements Initializable
         }
 
         suspendedLabel.setVisible(false);
-    }
-
-    private <T extends CSVSerializable> void initialImport(String filename, Class<T> c, Consumer<List<T>> consumer)
-    {
-        File file = new File(System.getProperty("user.dir"), filename);
-        if (file.exists())
-        {
-            try
-            {
-                List<T> list = importItems(file, c);
-                consumer.accept(list);
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
     }
 
     public void userSignUp(ActionEvent actionEvent) throws IOException
@@ -171,7 +149,7 @@ public class MainController implements Initializable
 
         if (file.exists())
         {
-            List<Book> books = importItems(file, Book.class);
+            List<Book> books = CSVSerializer.importItems(file, Book.class);
             Library.getInstance().getBooks().addAll(books);
 
             new Alert(AlertType.INFORMATION, books.size() + " book(s) added!").show();
@@ -188,7 +166,7 @@ public class MainController implements Initializable
 
         if (file.exists())
         {
-            List<User> users = importItems(file, User.class);
+            List<User> users = CSVSerializer.importItems(file, User.class);
             Library.getInstance().getUsers().addAll(users);
 
             new Alert(AlertType.INFORMATION, users.size() + " user(s) added!").show();
@@ -205,7 +183,7 @@ public class MainController implements Initializable
 
         if (file.exists())
         {
-            List<Loan> loans = importItems(file, Loan.class);
+            List<Loan> loans = CSVSerializer.importItems(file, Loan.class);
             Library.getInstance().getLoans().addAll(loans);
 
             new Alert(AlertType.INFORMATION, loans.size() + " loan(s) added!").show();
@@ -222,25 +200,6 @@ public class MainController implements Initializable
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files (*csv)", "*.csv"));
         return fileChooser.showOpenDialog(currentUserLabel.getScene().getWindow());
-    }
-
-    private <T extends CSVSerializable> List<T> importItems(File file, Class<T> c) throws IOException
-    {
-        List<T> items = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))))
-        {
-            reader.lines().forEach(line ->
-            {
-                try
-                {
-                    items.add(CSVSerializer.read(line, c));
-                } catch (IllegalAccessException | InstantiationException e)
-                {
-                    e.printStackTrace();
-                }
-            });
-        }
-        return items;
     }
 
     public void booksExport(ActionEvent actionEvent) throws FileNotFoundException
@@ -303,7 +262,8 @@ public class MainController implements Initializable
     {
         stage.setOnCloseRequest(event ->
         {
-            try{
+            try
+            {
                 onCloseRequest();
             } catch (FileNotFoundException e)
             {
@@ -314,15 +274,24 @@ public class MainController implements Initializable
 
     private void onCloseRequest() throws FileNotFoundException
     {
-        defaultExport("books.csv", Library.getInstance().getBooks());
-        defaultExport("users.csv", Library.getInstance().getUsers());
-        defaultExport("loans.csv", Library.getInstance().getLoans());
-    }
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setHeaderText("Back up data");
+        alert.setContentText("Would you like to export current application data?");
+        Optional<ButtonType> pressed = alert.showAndWait();
 
-    private <T extends CSVSerializable> void defaultExport(String fileName, List<T> list) throws FileNotFoundException
-    {
-        FileOutputStream fileOS = new FileOutputStream(new File(System.getProperty("user.dir"), fileName));
-        for (T object : list)
-            CSVSerializer.write(object, fileOS);
+        if(pressed.isPresent() && pressed.get() == ButtonType.OK)
+        {
+            CSVSerializer.defaultExport(
+                    new File(System.getProperty("user.dir"), "books.csv"),
+                    Library.getInstance().getBooks());
+
+            CSVSerializer.defaultExport(
+                    new File(System.getProperty("user.dir"), "users.csv"),
+                    Library.getInstance().getUsers());
+
+            CSVSerializer.defaultExport(
+                    new File(System.getProperty("user.dir"), "loans.csv"),
+                    Library.getInstance().getLoans());
+        }
     }
 }
