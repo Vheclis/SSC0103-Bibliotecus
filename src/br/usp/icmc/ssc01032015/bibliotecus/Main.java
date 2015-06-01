@@ -1,5 +1,6 @@
 package br.usp.icmc.ssc01032015.bibliotecus;
 
+import br.usp.icmc.ssc01032015.bibliotecus.controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,8 +14,11 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws IOException
     {
-        Parent root = FXMLLoader.load(getClass().getResource("/br/usp/icmc/ssc01032015/bibliotecus/view/Main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/br/usp/icmc/ssc01032015/bibliotecus/view/Main.fxml"));
+        Parent root = loader.load();
+        MainController controller = loader.getController();
         Stage stage = new Stage();
+        controller.startupStage(stage);
         stage.setTitle("Bibliotecus");
         stage.setScene(new Scene(root));
         stage.show();

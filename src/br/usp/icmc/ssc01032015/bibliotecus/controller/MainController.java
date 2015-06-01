@@ -23,7 +23,6 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -91,7 +90,7 @@ public class MainController implements Initializable
 
         initialImport("books.csv", Book.class, books -> Library.getInstance().getBooks().addAll(books));
         initialImport("users.csv", User.class, users -> Library.getInstance().getUsers().addAll(users) );
-        initialImport("loans.csv", Loan.class, loans -> Library.getInstance().getLoans().addAll(loans) );
+        initialImport("loans.csv", Loan.class, loans -> Library.getInstance().getLoans().addAll(loans));
         onCurrenDateChanged();
     }
 
@@ -259,7 +258,7 @@ public class MainController implements Initializable
         File file = openSaveDialog("users");
         if (file == null) return;
         FileOutputStream fileOS = new FileOutputStream(file);
-        for (User user: Library.getInstance().getUsers())
+        for (User user : Library.getInstance().getUsers())
             CSVSerializer.write(user, fileOS);
     }
 
@@ -298,5 +297,32 @@ public class MainController implements Initializable
     public void onDateChange(ActionEvent actionEvent)
     {
         Library.getInstance().setCurrentDate(datePicker.getValue());
+    }
+
+    public void startupStage(Stage stage)
+    {
+        stage.setOnCloseRequest(event ->
+        {
+            try{
+                onCloseRequest();
+            } catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void onCloseRequest() throws FileNotFoundException
+    {
+        defaultExport("books.csv", Library.getInstance().getBooks());
+        defaultExport("users.csv", Library.getInstance().getUsers());
+        defaultExport("loans.csv", Library.getInstance().getLoans());
+    }
+
+    private <T extends CSVSerializable> void defaultExport(String fileName, List<T> list) throws FileNotFoundException
+    {
+        FileOutputStream fileOS = new FileOutputStream(new File(System.getProperty("user.dir"), fileName));
+        for (T object : list)
+            CSVSerializer.write(object, fileOS);
     }
 }
