@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -48,6 +49,12 @@ public class MainController implements Initializable
 
     @FXML
     private Label currentUserLabel;
+
+    @FXML
+    private Label readOnlyLabel;
+
+    @FXML
+    private Label suspendedLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -79,10 +86,40 @@ public class MainController implements Initializable
         //enable-disable my books tab
         Library.getInstance().currentUserProperty().addListener(
                 (observable, oldValue, newValue) -> onCurrentUserChanged(newValue));
+        Library.getInstance().currentDateProperty().addListener(
+                (observable, oldValue, newValue) -> onCurrenDateChanged());
 
-        initialImport("books.csv", Book.class, books -> Library.getInstance().getBooks().addAll(books) );
+        initialImport("books.csv", Book.class, books -> Library.getInstance().getBooks().addAll(books));
         initialImport("users.csv", User.class, users -> Library.getInstance().getUsers().addAll(users) );
         initialImport("loans.csv", Loan.class, loans -> Library.getInstance().getLoans().addAll(loans) );
+        onCurrenDateChanged();
+    }
+
+    private void onCurrenDateChanged()
+    {
+        Library library = Library.getInstance();
+        long today = library.getCurrentDate().toEpochDay();
+        long newestLoanDate = library.getNewestLoanDate().toEpochDay();
+        readOnlyLabel.setVisible(today < newestLoanDate);
+        updateSuspendedLabel();
+    }
+
+    private void updateSuspendedLabel()
+    {
+        Library library = Library.getInstance();
+        if(library.getCurrentUser() != null)
+        {
+            int suspension = library.calculateUserSuspension(library.getCurrentUser());
+            if(suspension > 0)
+            {
+                suspendedLabel.setText("You are suspended until "
+                        + Library.getInstance().getCurrentDate().plusDays(suspension));
+                suspendedLabel.setVisible(true);
+                return;
+            }
+        }
+
+        suspendedLabel.setVisible(false);
     }
 
     private <T extends CSVSerializable> void initialImport(String filename, Class<T> c, Consumer<List<T>> consumer)
@@ -254,6 +291,8 @@ public class MainController implements Initializable
         {
             currentUserLabel.setText("None");
         }
+
+        updateSuspendedLabel();
     }
 
     public void onDateChange(ActionEvent actionEvent)

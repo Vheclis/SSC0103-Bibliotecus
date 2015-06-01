@@ -21,7 +21,7 @@
    </center>
     <bottom>
         <HBox BorderPane.alignment="CENTER">
-                <Button mnemonicParsing="true" onAction="#onCheckIn" text="Check _In" />
+                <Button fx:id="checkInButton" mnemonicParsing="true" onAction="#onCheckIn" text="Check _In" />
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>

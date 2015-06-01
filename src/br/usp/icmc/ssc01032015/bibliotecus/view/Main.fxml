@@ -3,30 +3,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<BorderPane prefHeight="480" prefWidth="854" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.MainController">
+<?import javafx.scene.layout.Pane?>
+<BorderPane prefHeight="480" prefWidth="854" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.usp.icmc.ssc01032015.bibliotecus.controller.MainController">
     <top>
         <MenuBar>
             <Menu text="_User">
-                <MenuItem onAction="#userSignUp" text="Sign Up" />
-                <SeparatorMenuItem />
-                <MenuItem onAction="#userSignIn" text="Sign In" />
+                <MenuItem onAction="#userSignUp" text="Sign Up"/>
+                <SeparatorMenuItem/>
+                <MenuItem onAction="#userSignIn" text="Sign In"/>
             </Menu>
 
             <Menu text="_Book">
-                <MenuItem onAction="#bookRegister" text="Register" />
+                <MenuItem onAction="#bookRegister" text="Register"/>
             </Menu>
 
             <Menu text="_CSV">
                 <Menu text="Import">
-                    <MenuItem onAction="#booksImport" text="Books" />
-                    <MenuItem onAction="#usersImport" text="Users" />
-                    <MenuItem onAction="#loansImport" text="Loans" />
+                    <MenuItem onAction="#booksImport" text="Books"/>
+                    <MenuItem onAction="#usersImport" text="Users"/>
+                    <MenuItem onAction="#loansImport" text="Loans"/>
                 </Menu>
 
                 <Menu text="Export">
-                    <MenuItem onAction="#booksExport" text="Books" />
-                    <MenuItem onAction="#usersExport" text="Users" />
-                    <MenuItem onAction="#loansExport" text="Loans" />
+                    <MenuItem onAction="#booksExport" text="Books"/>
+                    <MenuItem onAction="#usersExport" text="Users"/>
+                    <MenuItem onAction="#loansExport" text="Loans"/>
                 </Menu>
             </Menu>
         </MenuBar>
@@ -34,23 +36,24 @@
 
     <center>
         <TabPane>
-            <Tab fx:id="listBooksTab" closable="false" text="List Books" />
-            <Tab fx:id="listUsersTab" closable="false" text="List Users" />
-            <Tab fx:id="listLoansTab" closable="false" text="List Loans" />
-            <Tab fx:id="myBooksTab" closable="false" disable="true" text="My Books" />
+            <Tab fx:id="listBooksTab" closable="false" text="List Books"/>
+            <Tab fx:id="listUsersTab" closable="false" text="List Users"/>
+            <Tab fx:id="listLoansTab" closable="false" text="List Loans"/>
+            <Tab fx:id="myBooksTab" closable="false" disable="true" text="My Books"/>
         </TabPane>
     </center>
-   <bottom>
-      <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <items>
-            <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="5.0">
-               <children>
-                  <Label text="Current User:" HBox.hgrow="NEVER" />
-                  <Label fx:id="currentUserLabel" text="None" />
-                  <DatePicker fx:id="datePicker" onAction="#onDateChange" />
-               </children>
-            </HBox>
-        </items>
-      </ToolBar>
-   </bottom>
+    <bottom>
+        <ToolBar>
+            <Label text="Current User:"
+                   style="-fx-font-weight: bold"/>
+            <Label fx:id="currentUserLabel" text="None"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="readOnlyLabel" text="Read Only mode" visible="false"
+                   style="-fx-font-weight: bold; -fx-text-fill: red"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="suspendedLabel" text="You are suspended" visible="false"
+                   style="-fx-font-weight: bold; -fx-text-fill: mediumpurple"/>
+            <DatePicker fx:id="datePicker" onAction="#onDateChange"/>
+        </ToolBar>
+    </bottom>
 </BorderPane>
