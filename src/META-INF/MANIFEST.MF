@@ -1,4 +1,3 @@
 Manifest-Version: 1.0
-Class-Path: aquafx-0.2.jar stylemanager-0.1b2.jar
 Main-Class: br.usp.icmc.ssc01032015.bibliotecus.Main
 
