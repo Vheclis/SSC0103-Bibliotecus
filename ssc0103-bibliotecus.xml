@@ -188,7 +188,7 @@
   <target name="artifact.ssc0103-bibliotecus:jar" depends="init.artifacts, compile.module.ssc0103-bibliotecus" description="Build &#39;SSC0103-Bibliotecus:jar&#39; artifact">
     <property name="artifact.temp.output.ssc0103-bibliotecus:jar" value="${artifacts.temp.dir}/SSC0103_Bibliotecus_jar"/>
     <mkdir dir="${artifact.temp.output.ssc0103-bibliotecus:jar}"/>
-    <jar destfile="${temp.jar.path.SSC0103-Bibliotecus_jar.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+    <jar destfile="${temp.jar.path.SSC0103-Bibliotecus_jar.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain" manifest="src/META-INF/MANIFEST.MF">
       <zipfileset file="${basedir}/src/META-INF/MANIFEST.MF" prefix="META-INF"/>
       <zipfileset dir="${ssc0103-bibliotecus.output.dir}"/>
     </jar>
